@@ -13,16 +13,16 @@
             <span class='close'>&times;</span>
             <p>Add New Planet Menu:</p>
             <label for="massvalue">Mass:</label>
-            <input type='number' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
-            <input type='number' id='xpos' placeholder='Enter X Position'></input>
-            <input type='number' id='ypos' placeholder='Enter Y Position'></input>
-            <input type='number' id='zpos' placeholder='Enter Z Position'></input>
-            <input type='number' id='vxval' placeholder='Enter X Velocity'></input>
-            <input type='number' id='vyval' placeholder='Enter Y Velocity'></input>
-            <input type='number' id='vzval' placeholder='Enter Z Velocity'></input>
+            <input type='text' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
+            <input type='text' id='xpos' placeholder='Enter X Position'></input>
+            <input type='text' id='ypos' placeholder='Enter Y Position'></input>
+            <input type='text' id='zpos' placeholder='Enter Z Position'></input>
+            <input type='text' id='vxval' placeholder='Enter X Velocity'></input>
+            <input type='text' id='vyval' placeholder='Enter Y Velocity'></input>
+            <input type='text' id='vzval' placeholder='Enter Z Velocity'></input>
         </div>
         <div class='modal-footer'>
-            <button id='newMod'>Add Planet</button>
+            <a id='newMod'>Add Planet</a>
         </div>
     </div>
 
@@ -30,7 +30,7 @@
     <button>Add New Star</button>
 </div>
 <div class='infobox' style='position:absolute;'>
-    <div class="dropdown">
+    <div class="dropdown" style='position:absolute;'>
         <button class="dropbtn">Select Planet</button>
         <div class="dropdown-content">
             <a>Earth</a>
