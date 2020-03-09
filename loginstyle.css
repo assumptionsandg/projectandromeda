@@ -1,0 +1,193 @@
+
+body{
+    background-color: black;
+  }
+  
+ h1 {
+      text-align: center;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: "Lucida Console", lucida, monospace;
+      font-style: inherit;
+      font-size: 34px;
+      padding: 20px;
+      position: relative;
+    }
+  
+  .sign {
+      min-height: 400px;
+      position: relative;
+    text-align: center;
+    background-color: #000000;
+    opacity: 0.5;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+  
+  .column_center {
+    display: block;
+    padding: 100px;
+    position: relative;
+  }
+  
+  .column_bottom{
+    display: inline-block;
+    padding: 0px;
+    position: relative;
+  }
+  
+  p1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-family: "Lucida Console", lucida, monospace;
+    font-style: italic;
+    position: relative;
+
+  }
+  
+  p2 {
+    text-align: center;
+    color: #ffffff;
+    font-family: "Lucida Console", lucida, monospace;
+    position: relative;
+
+  }
+  
+  p3 {
+    text-align: center;
+    color: #ffffff;
+    font-family: "Lucida Console", lucida, monospace;
+    display:block;
+    position: relative;
+
+  }
+  
+
+  input[type=text] {
+      width: 190px;
+      padding: 5px;
+      margin: 200px 0;
+      border: 1px solid black;
+      border-radius: 12px;
+      outline: none;
+      box-sizing: border-box;
+      background-color:gray;
+      font-size: 16px;
+      color:#ffffff;
+      text-align: center;
+
+    }
+    
+    input[type=text] {
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+    }
+    
+    input[type=text]:focus {
+      width: 380px;
+    }
+  
+    .chat-text{
+      width:500px;
+      height:100px;
+      overflow: y-scroll;
+      position: relative;
+    }
+  
+    input[type=text]:focus {
+      background-color: black;
+    }
+  
+  
+    input[type=text]:focus {
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+      border: 1px solid #adaaa5;
+    }
+    
+    input[type=text]:hover {
+    transition: 0.5s;
+    background-color: black;
+    color: #adaaa5;
+    box-shadow: 0 16px 16px 0 black, 0 16px 50px 0 #adaaa5;
+    border: #adaaa5;
+  }
+     
+  input[type=password] {
+      width: 190px;
+      padding: 5px;
+      margin: 4px 0;
+      border: 1px solid black;
+      border-radius: 12px;
+      outline: none;
+      box-sizing: border-box;
+      background-color: gray;
+      font-size: 16px;
+      color: #ffffff;
+      text-align:center;
+    }
+  
+    input[type=password] {
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+    }
+    
+    input[type=password]:focus {
+      width: 380px;
+    }
+  
+  
+    input[type=password]:focus {
+      background-color: black;
+    }
+  
+    input[type=password]:focus {
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+      border: 1px solid #adaaa5;
+    }
+  
+    input[type=password]:hover {
+      transition: 0.5s;
+      background-color: black;
+      color: #adaaa5;
+      box-shadow: 0 12px 16px 0 black, 0 17px 50px 0 #adaaa5;
+      border: #adaaa5;
+    }
+  
+    button {
+      margin: 0 auto;
+      width:250px;
+      background-color:gray;
+      border: 1px solid black;
+      border-radius: 12px;
+      color: #ffffff;
+      padding: 5px;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      -webkit-transition-duration: 0.4s;
+      transition-duration: 0.4s;
+      cursor: pointer;
+
+      position: relative;
+    }
+  
+    button:hover {
+    transition: 0.5s;
+    background-color: black;
+    color: #adaaa5;
+    box-shadow: 0 12px 16px 0 black, 0 17px 50px 0 #adaaa5;
+    border: #adaaa5;
+  }
+  
+  .disabled {
+   
+    cursor: not-allowed;
+  }
+  
+  
