@@ -109,6 +109,7 @@
                 this.mesh.position.x=this.x
                 this.mesh.position.y=this.y
                 this.mesh.position.z=this.z
+                this.mesh.scale.multiplyScalar(2)
                 allmass.push(this.mass)
                 allmass.unshift(this.mass)
                 allmass.pop()
@@ -155,6 +156,7 @@
         class Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 this.mass=mass
+                this.affected=1
                 this.x=x
                 this.y=y
                 this.z=z
@@ -196,7 +198,15 @@
             }
 
             create(){
-                this.mesh=this.planet
+                if(this.isplanet!=0){
+                    this.mesh=this.planet
+                }
+                this.mesh.position.x=this.x
+                this.mesh.position.y=this.y
+                this.mesh.position.z=this.z
+            }
+
+            atmosphere(){
                 this.mesh.position.x=this.x
                 this.mesh.position.y=this.y
                 this.mesh.position.z=this.z
@@ -214,7 +224,9 @@
                 let gravConst=6.67e-11
                
                 allupdate.push(function(delta){
-                for(let i=2; i>-1; i--){
+                    if(self.affected==1){
+                    for(let i=2; i>-1; i--){
+                    
                     if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
                         radii=Math.sqrt(((self.mesh.position.x-allx[i])**2)+((self.mesh.position.y-ally[i])**2)+((self.mesh.position.z-allz[i])**2))
                     }
@@ -248,9 +260,12 @@
                     document.getElementById('xvelhtml').innerHTML=self.vx
                     document.getElementById('yvelhtml').innerHTML=self.vy
                     document.getElementById('zvelhtml').innerHTML=self.vz
-                
+                }
+                else{
+                }
                 })
                 
+
             }
 
             getMesh(){
@@ -368,68 +383,42 @@
             }
         }
 
-        class Atmosphere{
-            constructor(mass,x,y,z,vx,vy,vz){
-                let vertexShader	= [
-                'varying vec3	vVertexWorldPosition;',
-                'varying vec3	vVertexNormal;',
+        class Atmosphere extends Planet{
+            constructor(mass,colour,affect,scale,x,y,z,vx,vy,vz){
+                super(mass,x,y,z,vx,vy,vz)
+                this.glowColour=new THREE.Color(colour)
+                this.affected=affect
+                this.isplanet=0
+                this.scale=scale
 
-                'void main(){',
-                '	vVertexNormal	= normalize(normalMatrix * normal);',
-
-                '	vVertexWorldPosition	= (modelMatrix * vec4(position, 1.0)).xyz;',
-
-                '	// set gl_Position',
-                '	gl_Position	= projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
-                '}',
-
-                ].join('\n')
-                let fragmentShader	= [
-                'uniform vec3	glowColor;',
-                'uniform float	coeficient;',
-                'uniform float	power;',
-
-                'varying vec3	vVertexNormal;',
-                'varying vec3	vVertexWorldPosition;',
-
-                'void main(){',
-                '	vec3 worldCameraToVertex= vVertexWorldPosition - cameraPosition;',
-                '	vec3 viewCameraToVertex	= (viewMatrix * vec4(worldCameraToVertex, 0.0)).xyz;',
-                '	viewCameraToVertex	= normalize(viewCameraToVertex);',
-                '	float intensity		= pow(coeficient + dot(vVertexNormal, viewCameraToVertex), power);',
-                '	gl_FragColor		= vec4(glowColor, intensity);',
-                '}',
-            ].join('\n')
-
-            // create custom material from the shader code above
-            //   that is within specially labeled script tags
-            let material	= new THREE.ShaderMaterial({
-                uniforms: { 
-                    coeficient	: {
-                        type	: "f", 
-                        value	: 1.0
-                    },
-                    power		: {
-                        type	: "f",
-                        value	: 2
-                    },
-                    glowColor	: {
-                        type	: "c",
-                        value	: new THREE.Color('pink')
-                    },
-                },
-                vertexShader	: vertexShader,
-                fragmentShader	: fragmentShader,
-                //blending	: THREE.AdditiveBlending,
-                transparent	: true,
-                depthWrite	: false,
-            });
-            
+                this.atmos1()
+                this.atmosphere()
+                this.update()
+                
+                //this.atmos2()
+                //this.create()
+                //this.update()
             }
 
-            getMesh(){
-                return material
+            atmos1(){
+                this.geometry=new THREE.SphereGeometry(0.5,32,32)
+                this.material=THREEx.createAtmosphereMaterial()
+                this.material.uniforms.glowColor.value=this.glowColour
+                this.mesh = new THREE.Mesh(this.geometry,this.material)
+                this.mesh.scale.multiplyScalar(this.scale);
             }
+
+            atmos2(){
+                this.geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+                this.material	= THREEx.createAtmosphereMaterial()
+                this.material.side	= THREE.BackSide
+                this.material.uniforms.coeficient.value	= 0.4
+                this.material.uniforms.power.value		= 4.0
+                this.material.uniforms.glowColor.value	= this.glowColour
+                this.mesh	= new THREE.Mesh(this.geometry, this.material );
+                this.mesh.scale.multiplyScalar(this.scale+0.2);
+            }
+
         }
 
         class starField{
@@ -573,11 +562,14 @@
                         console.log('Earth')
                         self.add(new Earth(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                         self.add(new EarthCloud(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Atmosphere(massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='5'){
                         console.log('Mars')
                         self.add(new Mars(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Atmosphere(massPlanet,'blue',1,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+
                     }
 
                     else if(document.getElementById('selectpreset').value=='6'){
@@ -632,6 +624,9 @@
         simStart.addtoPage()
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
+        simStart.add(new Atmosphere(10,'red',0,2.01,0,0,0,0,0,0))
+        //simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
+        //simStart.add(new Atmosphere(10,'brown',1,1,5,-1,-1,-0.001,-0.001,-0.03))
 
     </script>
 
