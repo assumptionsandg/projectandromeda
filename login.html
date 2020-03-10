@@ -3,7 +3,7 @@
 
 <meta charset="UTF-8">
 
-<link rel="stylesheet" type="text/css" href="loginstyle.css">
+<link rel="stylesheet" type="text/css" href="/loginstyle.css">
 
 <title>Project Andromeda</title>
 
@@ -12,7 +12,7 @@
         <div class="column_center">
         <input id="signDiv-username" type="text" placeholder="Enter your username"></input>
         <input id="signDiv-password" type="password" placeholder="Enter your password"></input>
-        <button id="signDiv-signIn" class="normal">Sign In</button>
+        <button id="signIn">Sign In</button>
         <button id="signDiv-signUp" class="normal">Sign Up</button>
         <button id="discord" class="normal">Join the Discord!</button>
         <p1>Represented by the RotD Community</p1>
@@ -24,35 +24,27 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';></body>
-<script type='module'>
+<script src='three.min.js'></script>
+<script src='/threex.planets.js'></script>
+<script src='/threex.atmospherematerial.js'></script>
+<script>
     
-import * as THREE from '/three.module.js'
-
 let allupdate = []
 let allmass = []
 let allplanets = []
 let allcount = [] 
-let planetmass = []
-let planetx = []
-let planety = []
-let planetz = []
-let planetvx = []
-let planetvy = []
-let planetvz = []
 
 let allx = []
 let ally = []
 let allz = []
 let count=0
 let pcount=0
-let ccount=0
 
 allmass.fill(0)
 allplanets.fill(0)
 allx.fill(0)
 ally.fill(0)
 allz.fill(0)
-planetx.fill(0)
 
 class Star{
     constructor(mass,x,y,z,vx,vy,vz){
@@ -394,8 +386,8 @@ class Andromeda{
         this.light.shadowCameraTop	=  1
         this.light.shadowCameraBottom= -1
         this.camera.lookAt(0,0,0)
-        this.camera.position.z=-5
-        this.camera.position.x=10
+        //this.camera.position.z=-5
+        //this.camera.position.x=10
 
         this.light.shadowBias	= 0.001
         this.light.shadowDarkness	= 0.2
@@ -430,17 +422,32 @@ class Andromeda{
         }, false)
 
         */
-        self.camera.position.x=1
+        self.camera.position.y=2
+        self.camera.position.z=-5
 
         allupdate.push(function(delta, now){
             //self.camera.position.x += (self.vector.x*10 - (self.camera.position.x)) * (delta*3)
             //self.camera.position.y += (self.vector.y*10 - self.camera.position.y) * (delta*3)
-            self.camera.position.y = 2
+            //self.camera.position.y = 2
             
             if(self.camera.position.x<15){
                 self.camera.position.x+=0.01
             }
+        /*    
+        signIn.onclick = function(){
+            if(self.camera.position.x>=0){
+                allupdate.push(function(delta, now){
+                    self.camera.position.x-=0.1
+                    self.camera.position.z+=0.1
+                    self.camera.position.y-=0.1
+                    if(self.camera.position.x=0){
+                        self.camera.position.x=0
+                    }
+                })
+            }
             
+        }*/
+
 
             self.camera.lookAt(0,0,0)
             return delta;
