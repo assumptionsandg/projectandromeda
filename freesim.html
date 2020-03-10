@@ -53,6 +53,8 @@
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
     <script src='three.min.js'></script>
+    <script src='threex.planets.js'></script>
+    <script src='threex.atmospherematerial.js'></script>
     <script>
 
         let allupdate = []
@@ -193,6 +195,13 @@
                 
             }
 
+            create(){
+                this.mesh=this.planet
+                this.mesh.position.x=this.x
+                this.mesh.position.y=this.y
+                this.mesh.position.z=this.z
+            }
+
             update(){
                 let self = this
                 let ax=0
@@ -277,12 +286,8 @@
         class Earth extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                this.texture=THREE.ImageUtils.loadTexture('images/earthmap1k.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/earthbump1k.jpg')
-                this.bumpscale=0.05
-                this.speccmap=THREE.ImageUtils.loadTexture('images/earthspec1k.jpg')
-                this.spec=new THREE.Color('grey')
-                this.draw()
+                this.planet=THREEx.Planets.createEarth()
+                this.create()
                 this.update()
             }
         }
@@ -290,51 +295,9 @@
         class EarthCloud extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                let self=this
-                
-                self.canvasResult=document.createElement('canvas')
-                self.canvasResult.width=1024
-                self.canvasResult.height=512
-
-                self.imageMap=new Image()
-                self.imageMap.addEventListener('load', function(){
-                    self.canvasMap=document.createElement('canvas')
-                    self.canvasMap.width=self.imageMap.width
-                    self.canvasMap.height=self.imageMap.height
-                    self.contextMap=self.canvasMap.getContext('2d')
-                    self.contextMap.drawImage(self.imagemap,0,0)
-                    self.dataMap=contextMap.getImageData(0,0,self.canvasMap.width,self.canvasMap.height)
-                    
-                    self.imageTrans=new Image()
-                    self.imageTrans.addEventListener('load', function(){
-                        self.canvasTrans=docuemnt.createElement('canvas')
-                        self.canvasTrans.width=self.imageTrans.width
-                        self.canvasTrans.height=self.imageTrans.height
-                        self.contextTrans=self.canvasTrans.getContext('2d')
-                        self.contextTrans=drawImage(self.imageTrans,0,0)
-                        self.dataTrans=self.contextTrans.getImageData(0,0,self.canvasTrans.width,self.canvasTrans.height)
-                        self.dataResult=self.contextMap.createImageData(self.canvasMap.width,self.canvasMap.height)
-                        for(let y = 0, offset = 0; y < self.imageMap.height; y++){
-                            for(let x = 0; x < self.imageMap.width; x++, offset += 4){
-                                self.dataResult.data[offset+0]	= self.dataMap.data[offset+0]
-                                self.dataResult.data[offset+1]	= self.dataMap.data[offset+1]
-                                self.dataResult.data[offset+2]	= self.dataMap.data[offset+2]
-                                self.dataResult.data[offset+3]	= 255 - self.dataTrans.data[offset+0]
-                            }
-                        }
-                        self.contextResult.putImageData(self.dataResult,0,0)
-                        self.material.map.needsUpdate=true;
-                    })
-                    self.imageTrans.src='images/earthcloudmaptrans.jpg'
-                },false)
-                self.imageMap='images/earthcloudmap.jpg'
-
-                self.texture=new THREE.Texture(self.canvasResult)
-                self.sidey=THREE.DoubleSide
-                self.transparenty=true
-                self.opacitie=0.8
-                self.draw()
-                self.update()
+                this.planet=THREEx.Planets.createEarthCloud()
+                this.create()
+                this.update()
             }
             
         }
@@ -486,10 +449,10 @@
                 this.light	= new THREE.AmbientLight( 0x888888 )
                 this.scene.add( this.light )
                 this.light	= new THREE.DirectionalLight( 0xcccccc, 1 )
-                this.light.position.set(0,0,0)
+                this.light.position.set(5,5,5)
                 this.scene.add( this.light )
                 this.light.castShadow	= true
-                this.light.shadowCameraNear	= 0.01
+                this.light.shadowCameraNear	= 0.1
                 this.light.shadowCameraFar	= 15
                 this.light.shadowCameraFov	= 45
 
@@ -630,15 +593,8 @@
         simStart.addtoPage()
         simStart.add(new starField())
         //simStart.add(new Star(10,0,0,0,0,0,0,0))
-        simStart.add(new Earth(10,-1,0,0,0,0,0))
-        
-        
-        setInterval(function(){
-            console.log(document.getElementById('selectpreset').value)
-
-        }, 1000);
-        
-
+        simStart.add(new Earth(10,0,0,0,0,0,0))
+        simStart.add(new EarthCloud(10,0,0,0,0,0,0))
 
 
     </script>
