@@ -7,6 +7,15 @@
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden;'>    
     <h1>Welcome to Project Andromeda</h1>
+    <div id='tutorials'>
+        <p>Tutorials</p>
+    </div>
+    <div id='freesim'>
+        <p>The Free Simulator</p>
+    </div>
+    <div id='database'>
+        <p>Database</p>
+    </div>
     <script type='module'>
     
         import * as THREE from '/three.module.js'
@@ -377,7 +386,7 @@
                 this.light.shadowCameraTop	=  1
                 this.light.shadowCameraBottom= -1
                 this.camera.lookAt(0,0,0)
-                this.camera.position.z=-5
+                //this.camera.position.z=-5
                 this.camera.position.x=10
         
                 this.light.shadowBias	= 0.001
@@ -418,10 +427,10 @@
                 allupdate.push(function(delta, now){
                     //self.camera.position.x += (self.vector.x*10 - (self.camera.position.x)) * (delta*3)
                     //self.camera.position.y += (self.vector.y*10 - self.camera.position.y) * (delta*3)
-                    self.camera.position.y = 2
+                    //self.camera.position.y = 2
                     
-                    if(self.camera.position.x<15){
-                        self.camera.position.x+=0.01
+                    if(self.camera.position.x<25){
+                        self.camera.position.x+=0.1
                     }
                     
         
@@ -477,7 +486,7 @@
         simStart.add(new Star(10,0,0,0,0,0,0))
         simStart.add(new Earth(10,-5,1,1,0.001,0.001,0.03))
         simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
-        simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
+        //simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
     </script>
 </body>
 </html>
