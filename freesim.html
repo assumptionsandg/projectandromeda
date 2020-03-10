@@ -214,8 +214,7 @@
                 let gravConst=6.67e-11
                
                 allupdate.push(function(delta){
-                /*
-                    for(let i=2; i>-1; i--){
+                for(let i=2; i>-1; i--){
                     if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
                         radii=Math.sqrt(((self.mesh.position.x-allx[i])**2)+((self.mesh.position.y-ally[i])**2)+((self.mesh.position.z-allz[i])**2))
                     }
@@ -249,7 +248,7 @@
                     document.getElementById('xvelhtml').innerHTML=self.vx
                     document.getElementById('yvelhtml').innerHTML=self.vy
                     document.getElementById('zvelhtml').innerHTML=self.vz
-                */
+                
                 })
                 
             }
@@ -263,10 +262,8 @@
         class Mercury extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                this.texture=THREE.ImageUtils.loadTexture('images/mercurymap.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/mercurybump.jpg')
-                this.bumpscale=0.005
-                this.draw()
+                this.planet=THREEx.Planets.createMercury()
+                this.create()
                 this.update()
             }
         }
@@ -274,11 +271,8 @@
         class Venus extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                let self = this
-                this.texture=THREE.ImageUtils.loadTexture('images/venusmap.jpg')
-                self.bump=THREE.ImageUtils.loadTexture('images/venusbump.jpg')
-                this.bumpscale=0.005
-                this.draw()
+                this.planet=THREEx.Planets.createVenus()
+                this.create()
                 this.update()
             }
         }
@@ -305,10 +299,8 @@
         class Mars extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                this.texture=THREE.ImageUtils.loadTexture('images/marsmap1k.jpg')
-                self.bump=THREE.ImageUtils.loadTexture('images/marsbump1k.jpg')
-                this.bumpscale=0.05
-                this.draw()
+                this.planet=THREEx.Planets.createMars()
+                this.create()
                 this.update()
             }
         }
@@ -316,28 +308,53 @@
         class Jupiter extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                this.texture=THREE.ImageUtils.loadTexture('images/jupitermap.jpg')
-                this.bumpmap=this.texture
-                this.bumpscale=0.02
-                this.draw()
+                this.planet=THREEx.Planets.createJupiter()
+                this.create()
                 this.update()
             }
         }
 
         class Saturn extends Planet{
+            constructor(mass,x,y,z,vx,vy,vz){
+                super(mass,x,y,z,vx,vy,vz)
+                this.planet=THREEx.Planets.createSaturn()
+                this.create()
+                this.update()
+            }
+        }
 
+        class SaturnRing extends Planet{
+            constructor(mass,x,y,z,vx,vy,vz){
+                super(mass,x,y,z,vx,vy,vz)
+                this.planet=THREEx.Planets.createSaturnRing()
+                this.create()
+                this.update()
+            }
         }
 
         class Uranus extends Planet{
+            constructor(mass,x,y,z,vx,vy,vz){
+                super(mass,x,y,z,vx,vy,vz)
+                this.planet=THREEx.Planets.createUranus()
+                this.create()
+                this.update()
+            }
+        }
 
+        class UranusRing extends Planet{
+            constructor(mass,x,y,z,vx,vy,vz){
+                super(mass,x,y,z,vx,vy,vz)
+                this.planet=THREEx.Planets.createUranusRing()
+                this.create()
+                this.update()
+            }
         }
 
         class Neptune extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
-                this.texture=THREE.ImageUtils.loadTexture('images/mercurymap.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/mercurybump.jpg')
-                this.bumpscale=0.005
-                this.draw()
+                super(mass,x,y,z,vx,vy,vz)
+                this.planet=THREEx.Planets.createNeptune()
+                this.create()
                 this.update()
             }
         }
@@ -345,10 +362,8 @@
         class Pluto extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
-                this.texture=THREE.ImageUtils.loadTexture('images/mercurymap.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/mercurybump.jpg')
-                this.bumpscale=0.005
-                this.draw()
+                this.planet=THREEx.Planets.createPluto()
+                this.create()
                 this.update()
             }
         }
@@ -461,7 +476,7 @@
                 this.light.shadowCameraTop	=  1
                 this.light.shadowCameraBottom= -1
                 this.camera.lookAt(0,0,0)
-                this.camera.position.z=-1
+                this.camera.position.z=-5
 
                 this.light.shadowBias	= 0.001
                 this.light.shadowDarkness	= 0.2
@@ -540,34 +555,58 @@
 
                     
                     if(document.getElementById('selectpreset').value=='1'){
-                        console.log('this one')
+                        console.log('Generic')
                         self.add(new Planet(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
                     
                     else if(document.getElementById('selectpreset').value=='2'){
+                        console.log('Mercury')
                         self.add(new Mercury(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='3'){
+                        console.log('Venus')
                         self.add(new Venus(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
+                    else if(document.getElementById('selectpreset').value=='4'){
+                        console.log('Earth')
+                        self.add(new Earth(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new EarthCloud(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
                     else if(document.getElementById('selectpreset').value=='5'){
-                        console.log('new this one')
+                        console.log('Mars')
                         self.add(new Mars(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='6'){
+                        console.log('Jupiter')
                         self.add(new Jupiter(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='7'){
+                        console.log('Saturn')
                         self.add(new Saturn(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new SaturnRing(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='8'){
+                        console.log('Uranus')
                         self.add(new Uranus(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new UranusRing(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
+
+                    else if(document.getElementById('selectpreset').value=='9'){
+                        console.log('Neptune')
+                        self.add(new Neptune(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
+                    else if(document.getElementById('selectpreset').value=='10'){
+                        console.log('Pluto')
+                        self.add(new Pluto(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
 
                 }
                 
@@ -592,10 +631,7 @@
         let simStart = new Andromeda()
         simStart.addtoPage()
         simStart.add(new starField())
-        //simStart.add(new Star(10,0,0,0,0,0,0,0))
-        simStart.add(new Earth(10,0,0,0,0,0,0))
-        simStart.add(new EarthCloud(10,0,0,0,0,0,0))
-
+        simStart.add(new Star(10,0,0,0,0,0,0,0))
 
     </script>
 
