@@ -12,8 +12,20 @@
         <div class='modal-body'>
             <span class='close'>&times;</span>
             <p>Add New Planet Menu:</p>
-            <label for="massvalue">Mass:</label>
+            <select id='selectpreset'>
+                <option>Planet</option>
+                <option>Mercury</option>
+                <option>Venus</option>
+                <option>Earth</option>
+                <option>Mars</option>
+                <option>Jupiter</option>
+                <option>Saturn</option>
+                <option>Uranus</option>
+                <option>Neptune</option>
+                <option>Pluto</option>
+            </select>
             <input type='text' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
+            <input type='text' id='rot' placeholder='Enter Rotation'></input>
             <input type='text' id='xpos' placeholder='Enter X Position'></input>
             <input type='text' id='ypos' placeholder='Enter Y Position'></input>
             <input type='text' id='zpos' placeholder='Enter Z Position'></input>
@@ -30,14 +42,13 @@
     <button>Add New Star</button>
 </div>
 <div class='infobox' style='position:absolute;'>
-    <div class="dropdown" style='position:absolute;'>
-        <button class="dropbtn">Select Planet</button>
-        <div class="dropdown-content">
-            <a>Earth</a>
-            <a>Mars</a>
-            <a>Venus</a>
-        </div>
-      </div> 
+    <select id='changeplanet'></select>
+    <p>X Position: <span id='xposhtml'></span></p>
+    <p>Y Position: <span id='yposhtml'></span></p>
+    <p>Z Position: <span id='zposhtml'></span></p>
+    <p>X Velocity: <span id='xvelhtml'></span></p>
+    <p>Y Velocity: <span id='yvelhtml'></span></p>
+    <p>Z Velocity: <span id='zvelhtml'></span></p>
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
@@ -71,8 +82,9 @@
         planetx.fill(0)
 
         class Star{
-            constructor(mass,x,y,z,vx,vy,vz){
+            constructor(mass,rotation,x,y,z,vx,vy,vz){
                 this.mass=mass
+                this.rotation=rotation
                 this.x=x
                 this.y=y
                 this.z=z
@@ -99,9 +111,6 @@
                 allmass.push(this.mass)
                 allmass.unshift(this.mass)
                 allmass.pop()
-
-                
-                
                 // console.log(this.mesh.position.x)
                 // console.log(allmass)
             }
@@ -117,7 +126,8 @@
                 allplanets.push(count)
                 allplanets.push(0)
 
-                allupdate.push(function(){
+                allupdate.push(function(delta){
+                    self.mesh.rotation.x += 1/2 * delta;
                     allx.unshift(self.x)
                     ally.unshift(self.y)
                     allz.unshift(self.z)
@@ -153,15 +163,23 @@
                 this.draw()
                 this.update()
                 pcount+=1
+                let select, option;
 
+                select = document.getElementById( 'changeplanet' );
+                    
+                option = document.createElement( 'option' );
+                option.value = option.text = 'Earth';
+                select.add( option );
+                
+                
             }
 
             draw(){
                 let self = this
                 this.geometry = new THREE.SphereGeometry(0.5,32,32)
                 this.material = new THREE.MeshPhongMaterial({
-                    map:this.texture,
-                    bumpMap:this.bump,
+                    map:self.texture,
+                    bumpMap:self.bump,
                     bumpscale:this.bumpscale,
                     specularMap:this.speccmap,
                     specular:this.spec,
@@ -187,7 +205,7 @@
                 let radii=0
                 let gravConst=6.67e-11
                
-                allupdate.push(function(){
+                allupdate.push(function(delta){
                 for(let i=2; i>-1; i--){
                     if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
                         radii=Math.sqrt(((self.mesh.position.x-allx[i])**2)+((self.mesh.position.y-ally[i])**2)+((self.mesh.position.z-allz[i])**2))
@@ -209,12 +227,20 @@
                     // console.log(self.mesh.position.z)
 
                 } 
+                    self.mesh.rotation.y += 1/2 * delta;
                     self.vx+=ax
                     self.vy+=ay
                     self.vz+=az
                     self.mesh.position.x+=self.vx
                     self.mesh.position.y+=self.vy
                     self.mesh.position.z+=self.vz
+                    document.getElementById('xposhtml').innerHTML=self.mesh.position.x
+                    document.getElementById('yposhtml').innerHTML=self.mesh.position.y
+                    document.getElementById('zposhtml').innerHTML=self.mesh.position.z
+                    document.getElementById('xvelhtml').innerHTML=self.vx
+                    document.getElementById('yvelhtml').innerHTML=self.vy
+                    document.getElementById('zvelhtml').innerHTML=self.vz
+
                 })
                 
             }
@@ -239,8 +265,9 @@
         class Venus extends Planet{
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
+                let self = this
                 this.texture=THREE.ImageUtils.loadTexture('images/venusmap.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/venusbump.jpg')
+                self.bump=THREE.ImageUtils.loadTexture('images/venusbump.jpg')
                 this.bumpscale=0.005
                 this.draw()
                 this.update()
@@ -316,7 +343,7 @@
             constructor(mass,x,y,z,vx,vy,vz){
                 super(mass,x,y,z,vx,vy,vz)
                 this.texture=THREE.ImageUtils.loadTexture('images/marsmap1k.jpg')
-                this.bump=THREE.ImageUtils.loadTexture('images/marsbump1k.jpg')
+                self.bump=THREE.ImageUtils.loadTexture('images/marsbump1k.jpg')
                 this.bumpscale=0.05
                 this.draw()
                 this.update()
@@ -420,7 +447,11 @@
                 transparent	: true,
                 depthWrite	: false,
             });
-            return material
+            
+            }
+
+            getMesh(){
+                return material
             }
         }
 
@@ -543,20 +574,11 @@
                     let vxPlanet = parseFloat(document.getElementById('vxval').value);
                     let vyPlanet = parseFloat(document.getElementById('vyval').value);
                     let vzPlanet = parseFloat(document.getElementById('vzval').value)
-                    console.log(massPlanet)
-                    console.log(xPlanet)
-                    console.log(yPlanet)
-                    console.log(zPlanet)
-                    console.log(vxPlanet)
-                    console.log(vyPlanet)
-                    console.log(vzPlanet)
-                    planetmass.push(massPlanet)
-                    planetx.push(xPlanet)
-                    planety.push(yPlanet)
-                    planetz.push(zPlanet)
-                    planetvx.push(vxPlanet)
-                    planetvy.push(vyPlanet)
-                    planetvz.push(vzPlanet)
+                    
+
+                    document.getElementById('selectpreset').onchange = function(){
+                        console.log('hey')
+                    }
 
                     self.add(new Mars(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
@@ -581,12 +603,9 @@
         let simStart = new Andromeda()
         simStart.addtoPage()
         simStart.add(new starField())
-        simStart.add(new Star(10,0,0,0,0,0,0))
-        let test = new Atmosphere(10,-10,0,0,0,0,0)
-        // simStart.add(new EarthCloud(10,-5,1,1,0.001,0.001,0.03))
-        // simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
-        // simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
-
+        simStart.add(new Star(10,0,0,0,0,0,0,0))
+        simStart.add(new Earth(10,-5,1,0,0.001,0.001,0.03))
+        
         /*
         setInterval(function(){
             console.log(planetx)
