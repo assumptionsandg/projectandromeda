@@ -28,14 +28,6 @@
     
 import * as THREE from '/three.module.js'
 
-import { EffectComposer } from './jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from './jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from './jsm/postprocessing/ShaderPass.js';
-
-import { RGBShiftShader } from './jsm/shaders/RGBShiftShader.js';
-import { DotScreenShader } from './jsm/shaders/DotScreenShader.js';
-
-
 let allupdate = []
 let allmass = []
 let allplanets = []
@@ -53,6 +45,7 @@ let ally = []
 let allz = []
 let count=0
 let pcount=0
+let ccount=0
 
 allmass.fill(0)
 allplanets.fill(0)
@@ -178,7 +171,7 @@ class Planet{
         let radii=0
         let gravConst=6.67e-11
        
-        allupdate.push(function(){
+        allupdate.push(function(delta){
         for(let i=2; i>-1; i--){
             if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
                 radii=Math.sqrt(((self.mesh.position.x-allx[i])**2)+((self.mesh.position.y-ally[i])**2)+((self.mesh.position.z-allz[i])**2))
@@ -206,6 +199,7 @@ class Planet{
             self.mesh.position.x+=self.vx
             self.mesh.position.y+=self.vy
             self.mesh.position.z+=self.vz
+            self.mesh.rotation.y+= 1/2 * delta;
         })
         
     }
@@ -381,10 +375,10 @@ class Andromeda{
             antialias:true
         })
         this.renderer.setSize( window.innerWidth, window.innerHeight );
-
+        
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000 )
-       
+
         this.light	= new THREE.AmbientLight( 0x888888 )
         this.scene.add( this.light )
         this.light	= new THREE.DirectionalLight( 0xcccccc, 1 )
@@ -409,6 +403,8 @@ class Andromeda{
         this.light.shadowMapWidth	= 1024*2
         this.light.shadowMapHeight	= 1024*2
 
+        /*
+
         this.composer = new EffectComposer(this.renderer)
         this.composer.addPass( new RenderPass(this.scene,this.camera))
         
@@ -419,10 +415,12 @@ class Andromeda{
 		this.effect = new ShaderPass( RGBShiftShader );
 		this.effect.uniforms[ 'amount' ].value = 0.0015;
 		this.composer.addPass( this.effect );
+
+        */
         
         let self = this
 
-        self.vector = {x:1,y:1}
+        //self.vector = {x:1,y:1}
 
         /*
 
@@ -432,17 +430,25 @@ class Andromeda{
         }, false)
 
         */
+        self.camera.position.x=1
 
         allupdate.push(function(delta, now){
-            self.camera.position.x += (self.vector.x*10 - (self.camera.position.x)) * (delta*3)
-            self.camera.position.y += (self.vector.y*10 - self.camera.position.y) * (delta*3)
+            //self.camera.position.x += (self.vector.x*10 - (self.camera.position.x)) * (delta*3)
+            //self.camera.position.y += (self.vector.y*10 - self.camera.position.y) * (delta*3)
+            self.camera.position.y = 2
+            
+            if(self.camera.position.x<15){
+                self.camera.position.x+=0.01
+            }
+            
+
             self.camera.lookAt(0,0,0)
             return delta;
         })
 
         allupdate.push(function(){
-            //self.renderer.render( self.scene, self.camera );
-            self.composer.render();
+            self.renderer.render( self.scene, self.camera );
+            // self.composer.render();
         })
 
 
