@@ -13,16 +13,16 @@
             <span class='close'>&times;</span>
             <p>Add New Planet Menu:</p>
             <select id='selectpreset'>
-                <option>Planet</option>
-                <option>Mercury</option>
-                <option>Venus</option>
-                <option>Earth</option>
-                <option>Mars</option>
-                <option>Jupiter</option>
-                <option>Saturn</option>
-                <option>Uranus</option>
-                <option>Neptune</option>
-                <option>Pluto</option>
+                <option id='planet' value='1'>Planet</option>
+                <option id='mercury' value='2'>Mercury</option>
+                <option id='venus' value='3'>Venus</option>
+                <option id='earth' value='4'>Earth</option>
+                <option id='mars' value='5'>Mars</option>
+                <option id='jupiter' value='6'>Jupiter</option>
+                <option id='saturn' value='7'>Saturn</option>
+                <option id='uranus' value='8'>Uranus</option>
+                <option id='neptune' value='9'>Neptune</option>
+                <option id='pluto' value='10'>Pluto</option>
             </select>
             <input type='text' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
             <input type='text' id='rot' placeholder='Enter Rotation'></input>
@@ -178,11 +178,11 @@
                 let self = this
                 this.geometry = new THREE.SphereGeometry(0.5,32,32)
                 this.material = new THREE.MeshPhongMaterial({
-                    map:self.texture,
-                    bumpMap:self.bump,
-                    bumpscale:this.bumpscale,
-                    specularMap:this.speccmap,
-                    specular:this.spec,
+                    map:this.texture,
+                    bumpMap:this.bump,
+                    bumpScale:this.bumpscale,
+                    specularMap:THREE.ImageUtils.loadTexture('images/earthspec1k.jpg'),
+                    specular:new THREE.Color('grey'),
                     tansparent:this.transparenty,
                     opacity:this.opacitie,
                     side:this.sidey
@@ -390,9 +390,8 @@
             }
         }
 
-        class Atmosphere extends Planet{
+        class Atmosphere{
             constructor(mass,x,y,z,vx,vy,vz){
-                super(mass,x,y,z,vx,vy,vz)
                 let vertexShader	= [
                 'varying vec3	vVertexWorldPosition;',
                 'varying vec3	vVertexNormal;',
@@ -464,6 +463,7 @@
                 })
                 this.geometry	= new THREE.SphereGeometry(100, 32, 32)
                 this.mesh	= new THREE.Mesh(this.geometry,this.material)
+
             }
 
             getMesh(){
@@ -574,15 +574,41 @@
                     let vxPlanet = parseFloat(document.getElementById('vxval').value);
                     let vyPlanet = parseFloat(document.getElementById('vyval').value);
                     let vzPlanet = parseFloat(document.getElementById('vzval').value)
+
                     
-
-                    document.getElementById('selectpreset').onchange = function(){
-                        console.log('hey')
+                    if(document.getElementById('selectpreset').value=='1'){
+                        console.log('this one')
+                        self.add(new Planet(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+                    
+                    else if(document.getElementById('selectpreset').value=='2'){
+                        self.add(new Mercury(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
-                    self.add(new Mars(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    else if(document.getElementById('selectpreset').value=='3'){
+                        self.add(new Venus(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
+
+                    else if(document.getElementById('selectpreset').value=='5'){
+                        console.log('new this one')
+                        self.add(new Mars(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
+                    else if(document.getElementById('selectpreset').value=='6'){
+                        self.add(new Jupiter(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
+                    else if(document.getElementById('selectpreset').value=='7'){
+                        self.add(new Saturn(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
+                    else if(document.getElementById('selectpreset').value=='8'){
+                        self.add(new Uranus(massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                    }
+
+                }
                 
+
                 btn.onclick = function() {
                     modal.style.display = 'block';
                     }
@@ -606,16 +632,12 @@
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Earth(10,-5,1,0,0.001,0.001,0.03))
         
-        /*
+        
         setInterval(function(){
-            console.log(planetx)
-            console.log(planety)
-            console.log(planetz)
-            console.log(planetvx)
-            console.log(planetvy)
-            console.log(planetvz)
+            console.log(document.getElementById('selectpreset').value)
+
         }, 1000);
-        */
+        
 
 
 
