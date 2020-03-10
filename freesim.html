@@ -43,12 +43,12 @@
 </div>
 <div class='infobox' style='position:absolute;'>
     <select id='changeplanet'></select>
-    <p>X Position: <span id='xposhtml'></span></p>
+    <!--<p>X Position: <span id='xposhtml'></span></p> 
     <p>Y Position: <span id='yposhtml'></span></p>
     <p>Z Position: <span id='zposhtml'></span></p>
     <p>X Velocity: <span id='xvelhtml'></span></p>
     <p>Y Velocity: <span id='yvelhtml'></span></p>
-    <p>Z Velocity: <span id='zvelhtml'></span></p>
+    <p>Z Velocity: <span id='zvelhtml'></span></p> -->
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
@@ -254,15 +254,16 @@
                     self.mesh.position.x+=self.vx
                     self.mesh.position.y+=self.vy
                     self.mesh.position.z+=self.vz
+                    /*
                     document.getElementById('xposhtml').innerHTML=self.mesh.position.x
                     document.getElementById('yposhtml').innerHTML=self.mesh.position.y
                     document.getElementById('zposhtml').innerHTML=self.mesh.position.z
                     document.getElementById('xvelhtml').innerHTML=self.vx
                     document.getElementById('yvelhtml').innerHTML=self.vy
                     document.getElementById('zvelhtml').innerHTML=self.vz
+                    */
                 }
-                else{
-                }
+                
                 })
                 
 
@@ -625,6 +626,9 @@
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere(10,'red',0,2.01,0,0,0,0,0,0))
+        //simStart.add(new Earth(10,-5,1,1,0.001,0.001,0.03))
+
+
         //simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
         //simStart.add(new Atmosphere(10,'brown',1,1,5,-1,-1,-0.001,-0.001,-0.03))
 

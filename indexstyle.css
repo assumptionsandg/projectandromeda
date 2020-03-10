@@ -1,0 +1,80 @@
+
+body{
+  background-color: black;
+}
+
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-family: "Lucida Console", lucida, monospace;
+    font-style: inherit;
+    font-size: 34px;
+    opacity: 0.5;
+    padding: 20px;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+
+  }
+
+
+.column_center {
+  display: block;
+  padding: 100px;
+  position: relative;
+}
+
+.column_bottom{
+  display: inline-block;
+  padding: 0px;
+  position: relative;
+}
+
+
+input[type=text] {
+    width: 190px;
+    padding: 5px;
+    margin: 200px 0;
+    border: 1px solid black;
+    border-radius: 12px;
+    outline: none;
+    box-sizing: border-box;
+    background-color:gray;
+    font-size: 16px;
+    color:#ffffff;
+    text-align: center;
+
+  }
+
+  button {
+    margin: 0 auto;
+    width:250px;
+    background-color:gray;
+    border: 1px solid black;
+    border-radius: 12px;
+    color: #ffffff;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+    position: relative;
+  }
+
+  button:hover {
+  transition: 0.5s;
+  background-color: black;
+  color: #adaaa5;
+  box-shadow: 0 12px 16px 0 black, 0 17px 50px 0 #adaaa5;
+  border: #adaaa5;
+}
+
+.disabled {
+ 
+  cursor: not-allowed;
+}
+
