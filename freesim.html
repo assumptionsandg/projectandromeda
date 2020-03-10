@@ -52,9 +52,8 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
-    <script type='module'>
-
-        import * as THREE from '/three.module.js'
+    <script src='three.min.js'></script>
+    <script>
 
         let allupdate = []
         let allmass = []
@@ -206,7 +205,8 @@
                 let gravConst=6.67e-11
                
                 allupdate.push(function(delta){
-                for(let i=2; i>-1; i--){
+                /*
+                    for(let i=2; i>-1; i--){
                     if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
                         radii=Math.sqrt(((self.mesh.position.x-allx[i])**2)+((self.mesh.position.y-ally[i])**2)+((self.mesh.position.z-allz[i])**2))
                     }
@@ -240,7 +240,7 @@
                     document.getElementById('xvelhtml').innerHTML=self.vx
                     document.getElementById('yvelhtml').innerHTML=self.vy
                     document.getElementById('zvelhtml').innerHTML=self.vz
-
+                */
                 })
                 
             }
@@ -498,7 +498,7 @@
                 this.light.shadowCameraTop	=  1
                 this.light.shadowCameraBottom= -1
                 this.camera.lookAt(0,0,0)
-                this.camera.position.z=-5
+                this.camera.position.z=-1
 
                 this.light.shadowBias	= 0.001
                 this.light.shadowDarkness	= 0.2
@@ -629,8 +629,8 @@
         let simStart = new Andromeda()
         simStart.addtoPage()
         simStart.add(new starField())
-        simStart.add(new Star(10,0,0,0,0,0,0,0))
-        simStart.add(new Earth(10,-5,1,0,0.001,0.001,0.03))
+        //simStart.add(new Star(10,0,0,0,0,0,0,0))
+        simStart.add(new Earth(10,-1,0,0,0,0,0))
         
         
         setInterval(function(){
