@@ -17,4 +17,4 @@ Socket.IO:           https://github.com/socketio/socket.io
 References:
 Planetary motion:    https://www.gsjournal.net/Science-Journals/Research%20Papers-Astrophysics/Download/3763
 Various HTML/CSS:    https://www.w3schools.com/ 
-                     https://developer.mozilla.org/en-US/
+                 
