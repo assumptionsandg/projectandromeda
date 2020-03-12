@@ -3,7 +3,7 @@
 <h1>Project Andromeda</h1>
 
 <div class='vertibox' style='position:absolute;'>
-    <p>Version 0.03 Slightly Less Oof Build</p>
+    <p>Version 0.03 'Slightly Less Oof' Build</p>
     <button id='myBtn'>Add New Planet</button>
 
     <div id='myModal' class='modal'>
@@ -56,8 +56,8 @@
     <input type='text' id='newvy' placeholder='Enter Y Velocity'></input>
     <input type='text' id='newvz' placeholder='Enter Z Velocity'></input>
     <select id='modifyplanet'></select>
-    <button id='play' >Play</button>
-    <button id='pause' onclick="allupdate.push(function(){self.affected=0})">Pause</button>
+    <button id='play'>Play</button>
+    <button id='pause'>Pause</button>
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
@@ -84,7 +84,7 @@
         let count=0
         let pcount=0
         let htmlcount=0
-        let testcount=0
+        let ispaused=0
         
         allmass.fill(0)
         allplanets.fill(0)
@@ -239,9 +239,7 @@
             }
 
             create(){
-         
                 this.mesh=this.planet
-                
                 this.mesh.position.x=this.x
                 this.mesh.position.y=this.y
                 this.mesh.position.z=this.z
@@ -263,11 +261,9 @@
                 let rAz=0
                 let radii=0
                 let gravConst=6.67e-11
-
-                
                
                 allupdate.push(function(delta){
-                    if(self.affected==1){
+                    if(self.affected==1 && ispaused==0){
                     for(let i=2; i>-1; i--){
                     
                     if(allz[i]>self.mesh.position.z || ally[i]>self.mesh.position.y || allx[i]>self.mesh.position.x || allplanets[1]==0){
@@ -299,19 +295,8 @@
                     self.mesh.position.y+=self.vy
                     self.mesh.position.z+=self.vz
                     //console.log(ax)
-                    
-                    for(let j=0;j<=pcount;j++){
-                          
-                        
-                    pause.onclick = function(){
-                        console.log('test')
-                        
-                            self.affected=0
-                        
-                        // self.mesh.position.x=0
-                        }
-                    }
 
+                                        
                     play.onclick = function(){
                         console.log('test 2')
                         let changeX = document.getElementById('newxpos').value
@@ -321,15 +306,20 @@
                         let changeVY = document.getElementById('newvy').value
                         let changeVZ = document.getElementById('newvz').value
                                 
-                        self.mesh.position.x=parseFloat(changeX)
-                        self.mesh.position.y=parseFloat(changeY)
-                        self.mesh.position.z=parseFloat(changeZ)
-                        self.vx=parseFloat(changeVX)
-                        self.vy=parseFloat(changeVY)
-                        self.vz=parseFloat(changeVZ)
+                        //self.mesh.position.x=parseFloat(changeX)
+                        //self.mesh.position.y=parseFloat(changeY)
+                        //self.mesh.position.z=parseFloat(changeZ)
+                        //self.vx=parseFloat(changeVX)
+                        //self.vy=parseFloat(changeVY)
+                        //self.vz=parseFloat(changeVZ)
 
-                        self.affected=1
-                        }
+                        ispaused=0
+                    }
+
+                    pause.onclick = function(){
+                        ispaused=1
+                    }
+                        
 
                     if(self.isplanet!=0){
                         planetx[self.id]=self.mesh.position.x
@@ -370,6 +360,8 @@
                             
                             self.div.removeChild(self.vzposhtml)
                             self.div.appendChild(self.vzposhtml)
+
+
                         }
                         
                         else{
@@ -461,7 +453,7 @@
                 this.create()
                 this.update()
                 console.log(this.isplanet)
-                console.log(this.affected)
+                console.log(this.affected)     
             }
         }
         
@@ -842,9 +834,9 @@
             console.log(pcount)
         }, 1000);
         
-        //simStart.add(new Atmosphere('Atmosphere',11,1/2,0,10,'blue',1,1.05,5,-1,-1,-0.001,-0.001,-0.03))
-        //simStart.add(new Earth('Earth',11,1/2,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
-        //simStart.add(new EarthCloud('Earth',11,-1/2,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new Atmosphere('Atmosphere',11,1/2,0,10,'blue',1,1.05,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new Earth('Earth',11,1/2,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new EarthCloud('Earth',11,-1/2,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
         //self.add(new Atmosphere('Earth',0,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
         //name,id,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz
         //simStart.add(new Atmosphere(10,'brown',1,1,5,-1,-1,-0.001,-0.001,-0.03))
