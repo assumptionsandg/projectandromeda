@@ -373,6 +373,11 @@
                             self.div.removeChild(self.vzposhtml)
                             self.div.appendChild(self.vzposhtml)
 
+                            pause.onclick = function(){
+                                console.log('test')
+                                self.affected=0
+                            }
+
                             play.onclick = function(){
                                 let changeX = document.getElementById('newxpos').value
                                 let changeY = document.getElementById('newypos').value
@@ -388,10 +393,7 @@
                                 self.vy=parseFloat(changeVY)
                                 self.vz=parseFloat(changeVZ)
 
-                            pause.onclick = function(){
-                                console.log('test')
-                                self.affected=0
-                            }
+                                self.affected=1
                         }
 
 
@@ -820,8 +822,8 @@
         }, 1000);
         
 
-        simStart.add(new Earth('Base',11,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
-        simStart.add(new EarthCloud('Base',11,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new Earth('Earth',11,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new EarthCloud('Earth',11,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
         simStart.add(new Atmosphere('Atmosphere',0,0,10,'blue',1,1.05,5,-1,-1,-0.001,-0.001,-0.03))
         //self.add(new Atmosphere('Earth',0,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
         //name,id,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz
