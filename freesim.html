@@ -56,8 +56,8 @@
     <input type='text' id='newvy' placeholder='Enter Y Velocity'></input>
     <input type='text' id='newvz' placeholder='Enter Z Velocity'></input>
     <select id='modifyplanet'></select>
-    <button id='play'>Play</button>
-    <button id='pause'>Pause</button>
+    <button id='play' >Play</button>
+    <button id='pause' onclick="allupdate.push(function(){self.affected=0})">Pause</button>
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
@@ -163,12 +163,13 @@
         class Sun extends Star{
 
         }
-
+ 
         class Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
                 let self=this
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.mass=mass
                 this.div=document.getElementById('infoboxd')
@@ -290,7 +291,7 @@
 
                 }                     
 
-                    self.mesh.rotation.y += 1/2 * delta;
+                    self.mesh.rotation.y += self.rotation * delta;
                     self.vx+=ax
                     self.vy+=ay
                     self.vz+=az
@@ -298,9 +299,39 @@
                     self.mesh.position.y+=self.vy
                     self.mesh.position.z+=self.vz
                     //console.log(ax)
+                    
+                    for(let j=0;j<=pcount;j++){
+                          
+                        
+                    pause.onclick = function(){
+                        console.log('test')
+                        
+                            self.affected=0
+                        
+                        // self.mesh.position.x=0
+                        }
+                    }
+
+                    play.onclick = function(){
+                        console.log('test 2')
+                        let changeX = document.getElementById('newxpos').value
+                        let changeY = document.getElementById('newypos').value
+                        let changeZ = document.getElementById('newzpos').value
+                        let changeVX = document.getElementById('newvx').value
+                        let changeVY = document.getElementById('newvy').value
+                        let changeVZ = document.getElementById('newvz').value
+                                
+                        self.mesh.position.x=parseFloat(changeX)
+                        self.mesh.position.y=parseFloat(changeY)
+                        self.mesh.position.z=parseFloat(changeZ)
+                        self.vx=parseFloat(changeVX)
+                        self.vy=parseFloat(changeVY)
+                        self.vz=parseFloat(changeVZ)
+
+                        self.affected=1
+                        }
 
                     if(self.isplanet!=0){
-
                         planetx[self.id]=self.mesh.position.x
                         planety[self.id]=self.mesh.position.y
                         planetz[self.id]=self.mesh.position.z
@@ -373,30 +404,6 @@
                             self.div.removeChild(self.vzposhtml)
                             self.div.appendChild(self.vzposhtml)
 
-                            pause.onclick = function(){
-                                console.log('test')
-                                self.affected=0
-                            }
-
-                            play.onclick = function(){
-                                let changeX = document.getElementById('newxpos').value
-                                let changeY = document.getElementById('newypos').value
-                                let changeZ = document.getElementById('newzpos').value
-                                let changeVX = document.getElementById('newvx').value
-                                let changeVY = document.getElementById('newvy').value
-                                let changeVZ = document.getElementById('newvz').value
-                                
-                                self.mesh.position.x=parseFloat(changeX)
-                                self.mesh.position.y=parseFloat(changeY)
-                                self.mesh.position.z=parseFloat(changeZ)
-                                self.vx=parseFloat(changeVX)
-                                self.vy=parseFloat(changeVY)
-                                self.vz=parseFloat(changeVZ)
-
-                                self.affected=1
-                        }
-
-
                         }
      
                     }
@@ -415,10 +422,11 @@
         }
 
         class Mercury extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createMercury()
@@ -428,10 +436,11 @@
         }
 
         class Venus extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createVenus()
@@ -441,10 +450,11 @@
         }
 
         class Earth extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createEarth()
@@ -456,10 +466,11 @@
         }
         
         class EarthCloud extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createEarthCloud()
@@ -470,10 +481,11 @@
         }
 
         class Mars extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(mass,id,isplanet,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createMars()
@@ -483,10 +495,11 @@
         }
 
         class Jupiter extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createJupiter()
@@ -496,10 +509,11 @@
         }
 
         class Saturn extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createSaturn()
@@ -509,10 +523,11 @@
         }
 
         class SaturnRing extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createSaturnRing()
@@ -522,10 +537,11 @@
         }
 
         class Uranus extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createUranus()
@@ -535,10 +551,11 @@
         }
 
         class UranusRing extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createUranusRing()
@@ -548,10 +565,11 @@
         }
 
         class Neptune extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createNeptune()
@@ -561,10 +579,11 @@
         }
 
         class Pluto extends Planet{
-            constructor(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.affected=affect
                 this.planet=THREEx.Planets.createPluto()
@@ -574,10 +593,11 @@
         }
 
         class Atmosphere extends Planet{
-            constructor(name,id,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz){
-                super(name,id,isplanet,mass,affect,x,y,z,vx,vy,vz)
+            constructor(name,id,rotation,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz){
+                super(name,id,rotation,isplanet,mass,affect,x,y,z,vx,vy,vz)
                 this.name=name
                 this.id=id
+                this.rotation=rotation
                 this.isplanet=isplanet
                 this.glowColour=new THREE.Color(colour)
                 this.affected=affect
@@ -736,58 +756,58 @@
 
                     if(document.getElementById('selectpreset').value=='1'){
                         console.log('Generic')
-                        self.add(new Planet('Generic',1,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Planet('Generic',1,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
                     
                     else if(document.getElementById('selectpreset').value=='2'){
                         console.log('Mercury')
-                        self.add(new Mercury('Mercury',2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Mercury('Mercury',2,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='3'){
                         console.log('Venus')
-                        self.add(new Venus('Venus',3,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Venus('Venus',3,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='4'){
                         console.log('Earth')
-                        self.add(new Earth('Earth',planetID,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
-                        self.add(new EarthCloud('Earth',0,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
-                        self.add(new Atmosphere('Earth',0,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Earth('Earth',planetID,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new EarthCloud('Earth',0,-1/2,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Atmosphere('Earth',0,1/2,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
                     
                     else if(document.getElementById('selectpreset').value=='5'){
                         console.log('Mars')
-                        self.add(new Mars('Mars',5,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Mars('Mars',5,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                         //self.add(new Atmosphere(massPlanet,1,'blue',1,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
 
                     }
 
                     else if(document.getElementById('selectpreset').value=='6'){
                         console.log('Jupiter')
-                        self.add(new Jupiter('Jupiter',6,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Jupiter('Jupiter',6,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='7'){
                         console.log('Saturn')
-                        self.add(new Saturn('Saturn',7,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
-                        self.add(new SaturnRing('Saturn',0,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Saturn('Saturn',7,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new SaturnRing('Saturn',0,0,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='8'){
                         console.log('Uranus')
-                        self.add(new Uranus('Uranus',8,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
-                        self.add(new UranusRing('Uranus',0,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Uranus('Uranus',8,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new UranusRing('Uranus',0,0,0,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='9'){
                         console.log('Neptune')
-                        self.add(new Neptune('Neptune',9,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Neptune('Neptune',9,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
                     else if(document.getElementById('selectpreset').value=='10'){
                         console.log('Pluto')
-                        self.add(new Pluto('Pluto',10,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Pluto('Pluto',10,1/2,1,massPlanet,1,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
 
 
@@ -816,19 +836,19 @@
         simStart.addtoPage()
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
-        simStart.add(new Atmosphere('Atmosphere',0,0,1,'red',0,2.01,0,0,0,0,0,0))
+        simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'red',0,2.01,0,0,0,0,0,0))
         
         setInterval(function(){
+            console.log(pcount)
         }, 1000);
         
-
-        simStart.add(new Earth('Earth',11,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
-        simStart.add(new EarthCloud('Earth',11,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
-        simStart.add(new Atmosphere('Atmosphere',0,0,10,'blue',1,1.05,5,-1,-1,-0.001,-0.001,-0.03))
+        //simStart.add(new Atmosphere('Atmosphere',11,1/2,0,10,'blue',1,1.05,5,-1,-1,-0.001,-0.001,-0.03))
+        //simStart.add(new Earth('Earth',11,1/2,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
+        //simStart.add(new EarthCloud('Earth',11,-1/2,0,10,1,5,-1,-1,-0.001,-0.001,-0.03))
         //self.add(new Atmosphere('Earth',0,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
         //name,id,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz
         //simStart.add(new Atmosphere(10,'brown',1,1,5,-1,-1,-0.001,-0.001,-0.03))
-
+        
         
     </script>
 
