@@ -24,15 +24,16 @@
                 <option id='neptune' value='9'>Neptune</option>
                 <option id='pluto' value='10'>Pluto</option>
             </select>
-            <input type='text' id='nameplanet' placeholder='Enter Planet Name'></input>
-            <input type='text' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
-            <input type='text' id='rot' placeholder='Enter Rotation'></input>
-            <input type='text' id='xpos' placeholder='Enter X Position'></input>
-            <input type='text' id='ypos' placeholder='Enter Y Position'></input>
-            <input type='text' id='zpos' placeholder='Enter Z Position'></input>
-            <input type='text' id='vxval' placeholder='Enter X Velocity'></input>
-            <input type='text' id='vyval' placeholder='Enter Y Velocity'></input>
-            <input type='text' id='vzval' placeholder='Enter Z Velocity'></input>
+            <!-- <input type='number' id='nameplanet' placeholder='Enter Planet Name'></input>             -->
+            <input type='number' id='planetid' placeholder='Enter Planet ID'></input>
+            <input type='number' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
+            <input type='number' id='rot' placeholder='Enter Rotation'></input>
+            <input type='number' id='xpos' placeholder='Enter X Position'></input>
+            <input type='number' id='ypos' placeholder='Enter Y Position'></input>
+            <input type='number' id='zpos' placeholder='Enter Z Position'></input>
+            <input type='number' id='vxval' placeholder='Enter X Velocity'></input>
+            <input type='number' id='vyval' placeholder='Enter Y Velocity'></input>
+            <input type='number' id='vzval' placeholder='Enter Z Velocity'></input>
         </div>
         <div class='modal-footer'>
             <a id='newMod'>Add Planet</a>
@@ -42,6 +43,7 @@
     </div>
     <button>Add New Star</button>
 </div>
+
 <div class='infobox' id='infoboxd' style='position:absolute;'>
     <select id='changeplanet'></select>
     <!--<p>X Position: <span id='xposhtml'></span></p> 
@@ -50,6 +52,18 @@
     <p>X Velocity: <span id='xvelhtml'></span></p>
     <p>Y Velocity: <span id='yvelhtml'></span></p>
     <p>Z Velocity: <span id='zvelhtml'></span></p> -->
+</div>
+
+<div class='bottombox' id='bottomboxd'>
+    <input type='text' id='newxpos' placeholder='Enter X Position'></input>
+    <input type='text' id='newypos' placeholder='Enter Y Position'></input>
+    <input type='text' id='newzpos' placeholder='Enter Z Position'></input>
+    <input type='text' id='newvx' placeholder='Enter X Velocity'></input>
+    <input type='text' id='newvy' placeholder='Enter Y Velocity'></input>
+    <input type='text' id='newvz' placeholder='Enter Z Velocity'></input>
+    <select id='modifyplanet'></select>
+    <button id='play'>Play</button>
+    <button id='pause'>Pause</button>
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
@@ -164,7 +178,9 @@
                 this.isplanet=isplanet
                 this.mass=mass
                 this.div=document.getElementById('infoboxd')
+                this.otherdiv=document.getElementById('bottomboxd')
                 this.option=document.createElement('option');
+                //this.optiond=document.createElement('optiond');
                 this.select=document.getElementById('changeplanet')
                 this.affected=1
                 this.x=x
@@ -195,6 +211,8 @@
                 self.div.appendChild(self.vzposhtml)
                 this.option.text =this.name
                 this.option.value=this.id
+            
+                //this.modify.add(this.optiond)
                 this.select.add(this.option);
                 }
                 this.draw()
@@ -203,7 +221,7 @@
                
                 
 
-             }
+            }
 
             draw(){
                 let self = this
@@ -250,6 +268,8 @@
                 let rAz=0
                 let radii=0
                 let gravConst=6.67e-11
+
+                
                
                 allupdate.push(function(delta){
                     if(self.affected==1){
@@ -357,9 +377,32 @@
                         
                             self.div.removeChild(self.vzposhtml)
                             self.div.appendChild(self.vzposhtml)
+
+                            play.onclick = function(){
+                                let changeX = document.getElementById('newxpos').value
+                                let changeY = document.getElementById('newypos').value
+                                let changeZ = document.getElementById('newzpos').value
+                                let changeVX = document.getElementById('newvx').value
+                                let changeVY = document.getElementById('newvy').value
+                                let changeVZ = document.getElementById('newvz').value
+                                
+                                self.mesh.position.x=parseFloat(changeX)
+                                self.mesh.position.y=parseFloat(changeY)
+                                self.mesh.position.z=parseFloat(changeZ)
+                                self.vx=parseFloat(changeVX)
+                                self.vy=parseFloat(changeVY)
+                                self.vz=parseFloat(changeVZ)
+
+                            pause.onclick = function(){
+                            }
+                        }
+
+
                         }
      
                     }
+                    
+                       
                     /*
                     document.getElementById('xposhtml').innerHTML=self.mesh.position.x
                     document.getElementById('yposhtml').innerHTML=self.mesh.position.y
@@ -677,6 +720,7 @@
                
                 newMod.onclick = function() {
                     let massPlanet = parseFloat(document.getElementById('massvalue').value);
+                    let planetID = parseFloat(document.getElementById('planetid').value);
                     let xPlanet = parseFloat(document.getElementById('xpos').value);
                     let yPlanet = parseFloat(document.getElementById('ypos').value);
                     let zPlanet = parseFloat(document.getElementById('zpos').value);
@@ -684,7 +728,6 @@
                     let vyPlanet = parseFloat(document.getElementById('vyval').value);
                     let vzPlanet = parseFloat(document.getElementById('vzval').value)
 
-                    
                     if(document.getElementById('selectpreset').value=='1'){
                         console.log('Generic')
                         self.add(new Planet('Generic',1,1,massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
@@ -702,11 +745,11 @@
 
                     else if(document.getElementById('selectpreset').value=='4'){
                         console.log('Earth')
-                        self.add(new Earth('Earth',4,1,massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
+                        self.add(new Earth('Earth',planetID,1,massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                         self.add(new EarthCloud('Earth',0,0,massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                         self.add(new Atmosphere('Earth',0,0,massPlanet,'blue',1,1.05,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
                     }
-
+                    
                     else if(document.getElementById('selectpreset').value=='5'){
                         console.log('Mars')
                         self.add(new Mars('Mars',5,1,massPlanet,xPlanet,yPlanet,zPlanet,vxPlanet,vyPlanet,vzPlanet))
@@ -743,6 +786,7 @@
 
 
                 }
+
                 
 
                 btn.onclick = function() {
@@ -767,15 +811,15 @@
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,0,1,'red',0,2.01,0,0,0,0,0,0))
-        name,id,isplanet,mass,colour,affect,scale,x,y,z,vx,vy,vz
         
         setInterval(function(){
         }, 1000);
         
 
-        //simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
+        simStart.add(new Earth('Earth 2',11,1,10,5,-1,-1,-0.001,-0.001,-0.03))
         //simStart.add(new Atmosphere(10,'brown',1,1,5,-1,-1,-0.001,-0.001,-0.03))
 
+        
     </script>
 
 </body>

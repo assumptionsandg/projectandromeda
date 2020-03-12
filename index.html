@@ -2,6 +2,9 @@
 <html>
 <meta charset="UTF-8">
 <link rel='stylesheet' type='text/css' href='indexstyle.css'>
+<select id='modifyplanet'></select>
+<select id='changeplanet'></select>
+
 
 <title>Project Andromeda</title>
 
@@ -119,6 +122,10 @@
         
         class Planet{
             constructor(mass,x,y,z,vx,vy,vz){
+                this.modify=document.getElementById('modifyplanet')
+                this.option=document.createElement('option');
+                this.select=document.getElementById('changeplanet')
+                this.optiond=document.createElement('optiond');
                 this.mass=mass
                 this.x=x
                 this.y=y
@@ -126,6 +133,10 @@
                 this.vx=vx
                 this.vy=vy
                 this.vz=vz
+                this.option.text ='test'
+                this.option.value=1
+                this.modify.add(this.option);
+                this.select.add(this.option);
                 this.draw()
                 this.update()
                 pcount+=1
@@ -487,6 +498,7 @@
         simStart.add(new Earth(10,-5,1,1,0.001,0.001,0.03))
         simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
         //simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
+        
     </script>
 </body>
 </html>
