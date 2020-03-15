@@ -13,7 +13,7 @@
         <input id="signDiv-username" type="text" placeholder="Enter your username"></input>
         <input id="signDiv-password" type="password" placeholder="Enter your password"></input>
         <button id="signIn">Sign In</button>
-        <button id="signDiv-signUp" class="normal">Sign Up</button>
+        <button id="signUp" class="normal">Sign Up</button>
         </div>
         <div class="column_bottom">
             <p2>Version 0.03 February 2020 "Slightly Less Oof" Build</p2>
@@ -54,6 +54,37 @@
     //simStart.add(new Earth(10,1,1/4,1,10,-5,1,1,0.001,0.001,0.03))
     simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
     simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
+
+    let socket=io('http://localhost:8080')
+    let signDiv = document.getElementById('signDiv');
+    let signDivUsername = document.getElementById('signDiv-username');
+    let signDivPassword = document.getElementById('signDiv-password')
+    let signDivSignIn = document.getElementById('signIn');
+    let signDivSignUp = document.getElementById('signUp');
+
+    signDivSignIn.onclick = function(){
+        socket.emit('signIn',{username:signDivUsername.value,password:signDivPassword.value});
+    }
+    
+    signDivSignUp.onclick = function(){
+        socket.emit('signUp',{username:signDivUsername.value,password:signDivPassword.value});
+    }
+    
+    socket.on('signInResponse',function(data){
+        if(data.success){
+            //signDiv.style.display = 'none';
+            //gameDiv.style.display = 'inline-block';
+            alert("Sign in successful")
+        } else
+            alert("Sign in unsuccessful.");
+    });
+    
+    socket.on('signUpResponse',function(data){
+        if(data.success){
+            alert("Sign up successful.");
+        } else
+            alert("Sign up unsuccessful.");
+    });
     
 </script>
 
