@@ -296,7 +296,7 @@
                     //planetz[self.id]=self.mesh.position.z
                     //console.log(ax)
 
-                    if(document.getElementById('play') && document.getElementById('pause') && document.getElementById('mod') && select){
+                    if(document.getElementById('play') && document.getElementById('pause') && document.getElementById('mod') && self.select){
                         play.onclick = function(){
                             ispaused=0
                         }
