@@ -25,6 +25,10 @@ let pcount=0
 let htmlcount=0
 let ispaused=0
 
+let inverseconvert = function(value){
+    return ((value/60)*10000000)/(1.496e+11)
+}
+
 allmass.fill(0)
 allplanets.fill(0)
 //planetid.fill(0)
@@ -247,11 +251,6 @@ class Planet{
         let radii=0
         let gravConst=6.67e-11
 
-        let round = function(value, precision) {
-            let multiplier = Math.pow(10, precision || 0);
-            return Math.round(value * multiplier) / multiplier;
-        }
-
         let conversion = function(value){
             return ((((value)*60)/10000000)*1.496e+11)
         }
@@ -322,29 +321,29 @@ class Planet{
                     let changeVY = document.getElementById('newvy').value
                     let changeVZ = document.getElementById('newvz').value
 
-                    planetx[currentid]=parseFloat(changeX)
-                    planety[currentid]=parseFloat(changeY)
-                    planetz[currentid]=parseFloat(changeZ)
-                    planetvx[currentid]=parseFloat(changeVX)
-                    planetvy[currentid]=parseFloat(changeVY)
-                    planetvz[currentid]=parseFloat(changeVZ)
+                    planetx[currentid]=parseFloat(changeX)*10
+                    planety[currentid]=parseFloat(changeY)*10
+                    planetz[currentid]=parseFloat(changeZ)*10
+                    planetvx[currentid]=inverseconvert(parseFloat(changeVX))
+                    planetvy[currentid]=inverseconvert(parseFloat(changeVY))
+                    planetvz[currentid]=inverseconvert(parseFloat(changeVZ))
 
                     if(currentname=='Earth' || currentname=='Saturn' || currentname=='Uranus'){
-                        planetx[currentid+1]=parseFloat(changeX)
-                        planety[currentid+1]=parseFloat(changeY)
-                        planetz[currentid+1]=parseFloat(changeZ)
-                        planetvx[currentid+1]=parseFloat(changeVX)
-                        planetvy[currentid+1]=parseFloat(changeVY)
-                        planetvz[currentid+1]=parseFloat(changeVZ)
+                        planetx[currentid+1]=parseFloat(changeX)*10
+                        planety[currentid+1]=parseFloat(changeY)*10
+                        planetz[currentid+1]=parseFloat(changeZ)*10
+                        planetvx[currentid+1]=inverseconvert(parseFloat(changeVX))
+                        planetvy[currentid+1]=inverseconvert(parseFloat(changeVY))
+                        planetvz[currentid+1]=inverseconvert(parseFloat(changeVZ))
                         console.log('Works')
 
                         if(currentname=='Earth'){
-                            planetx[currentid+2]=parseFloat(changeX)
-                            planety[currentid+2]=parseFloat(changeY)
-                            planetz[currentid+2]=parseFloat(changeZ)
-                            planetvx[currentid+2]=parseFloat(changeVX)
-                            planetvy[currentid+2]=parseFloat(changeVY)
-                            planetvz[currentid+2]=parseFloat(changeVZ)
+                            planetx[currentid+2]=parseFloat(changeX)*10
+                            planety[currentid+2]=parseFloat(changeY)*10
+                            planetz[currentid+2]=parseFloat(changeZ)*10
+                            planetvx[currentid+2]=inverseconvert(parseFloat(changeVX))
+                            planetvy[currentid+2]=inverseconvert(parseFloat(changeVY))
+                            planetvz[currentid+2]=inverseconvert(parseFloat(changeVZ))
                             console.log('Also works')
 
                         }
@@ -776,17 +775,16 @@ class Andromeda{
         let btn = document.getElementById('myBtn');
         let newModal = document.getElementById('newMod')
         let span = document.getElementsByClassName('close')[0];
-        
+ 
         if(newModal && btn && span){
         newMod.onclick = function() {
             let massPlanet = parseFloat(document.getElementById('massvalue').value);
-            let planetID = parseFloat(document.getElementById('planetid').value);
-            let xPlanet = parseFloat(document.getElementById('xpos').value);
-            let yPlanet = parseFloat(document.getElementById('ypos').value);
-            let zPlanet = parseFloat(document.getElementById('zpos').value);
-            let vxPlanet = parseFloat(document.getElementById('vxval').value);
-            let vyPlanet = parseFloat(document.getElementById('vyval').value);
-            let vzPlanet = parseFloat(document.getElementById('vzval').value)
+            let xPlanet = parseFloat(document.getElementById('xpos').value)*10;
+            let yPlanet = parseFloat(document.getElementById('ypos').value)*10;
+            let zPlanet = parseFloat(document.getElementById('zpos').value)*10;
+            let vxPlanet = inverseconvert(parseFloat(document.getElementById('vxval').value));
+            let vyPlanet = inverseconvert(parseFloat(document.getElementById('vyval').value));
+            let vzPlanet = inverseconvert(parseFloat(document.getElementById('vzval').value));
 
             if(document.getElementById('selectpreset').value=='1'){
                 console.log('Generic')
