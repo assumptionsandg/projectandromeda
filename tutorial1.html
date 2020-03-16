@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<link rel='stylesheet' type='text/css' href='simstyle.css'>
+<link rel='stylesheet' type='text/css' href='/tutorialstyle.css'>
 <title>Project Andromeda</title>
 <h1>Project Andromeda</h1>
+
+<div class='tutorialbox' style='position:absolute;'>
+    <p>Welcome to the first tutorial!</p>
+    <p>In this tutorial you will learn how to use the simulator</p>
+    <button id='next'>Next</button>
+</div>
 
 <div class='vertibox' style='position:absolute;'>
     <p>Version 0.03 'Slightly Less Oof' Build</p>
@@ -13,7 +19,6 @@
         <div class='modal-body'>
             <span class='close'>&times;</span>
             <p>Add New Planet Menu:</p>
-            <p>Distance in AU | Velocity in m/s</p>
             <select id='selectpreset'>
                 <option id='planet' value='1'>Planet</option>
                 <option id='mercury' value='2'>Mercury</option>
@@ -64,10 +69,10 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
-    <script src='three.min.js'></script>
-    <script src='threex.planets.js'></script>
-    <script src='threex.atmospherematerial.js'></script>
-    <script src='simulator.js'></script>
+    <script src='/three.min.js'></script>
+    <script src='/threex.planets.js'></script>
+    <script src='/threex.atmospherematerial.js'></script>
+    <script src='/simulator.js'></script>
     <script>
         let indexlogin=0
         let simStart = new Andromeda()

@@ -5,12 +5,14 @@ let allplanets = []
 let allcount = []
 
 //let planetid = []
+let planetdistance = []
 let planetx = []
 let planety = []
 let planetz = []
 let planetvx = []
 let planetvy = []
 let planetvz = []
+let planetv = []
 
 let testcount=-1
 let currentid=0
@@ -24,9 +26,11 @@ let count=0
 let pcount=0
 let htmlcount=0
 let ispaused=0
+let globaldelta=0
+let timescale=6400000
 
 let inverseconvert = function(value){
-    return ((value/60)*10000000)/(1.496e+11)
+    return ((value/(1/globaldelta))*timescale)/(1.496e+11)
 }
 
 allmass.fill(0)
@@ -94,6 +98,7 @@ class Star{
             self.mesh.position.x+=self.vx
             self.mesh.position.y+=self.vy
             self.mesh.position.z+=self.vz
+            console.log(globaldelta)
         })
     }
 
@@ -156,6 +161,8 @@ class Planet{
         console.log(this.id)
         //console.log(this.isplanet)
         if(this.isplanet!=0 && this.div){
+        self.distancehtml=document.createElement('p')
+        self.distancehtml.innerHTML=''
         self.xposhtml=document.createElement('p')
         self.xposhtml.innerHTML=''
         self.yposhtml=document.createElement('p')
@@ -168,12 +175,16 @@ class Planet{
         self.vyposhtml.innerHTML=''
         self.vzposhtml=document.createElement('p')
         self.vzposhtml.innerHTML=''
+        self.vhtml=document.createElement('p')
+        self.vhtml.innerHTML=''
+        self.div.appendChild(self.distancehtml)
         self.div.appendChild(self.xposhtml)
         self.div.appendChild(self.yposhtml)
         self.div.appendChild(self.zposhtml)
         self.div.appendChild(self.vxposhtml)
         self.div.appendChild(self.vyposhtml)
         self.div.appendChild(self.vzposhtml)
+        self.div.appendChild(self.vhtml)
         this.option.text =this.name
         this.option.value=this.id
         //globaloption=this.select.value
@@ -248,15 +259,16 @@ class Planet{
         let rAx=0
         let rAy=0
         let rAz=0
+        let rv=0
         let radii=0
         let gravConst=6.67e-11
 
         let conversion = function(value){
-            return ((((value)*60)/10000000)*1.496e+11)
+            return ((((value)*(1/globaldelta))/timescale)*1.496e+11)
         }
         
         allupdate.push(function(delta){
-            
+            globaldelta=delta
             if(self.affected==1 && ispaused==0){
             for(let i=2; i>-1; i--){
             
@@ -269,9 +281,9 @@ class Planet{
             ax=-(gravConst*(allmass[i])*self.mesh.position.x)/radii**3
             ay=-(gravConst*(allmass[i])*self.mesh.position.y)/radii**3
             az=-(gravConst*(allmass[i])*self.mesh.position.z)/radii**3
-            ax=ax*10000000
-            ay=ay*10000000
-            az=az*10000000
+            ax=ax*timescale
+            ay=ay*timescale
+            az=az*timescale
             rAx+=ax
             rAy+=ay
             rAz+=az
@@ -284,6 +296,9 @@ class Planet{
         }          
 
             self.mesh.rotation.y += self.rotation * delta;
+
+            planetdistance[self.id]=radii
+
             planetvx[self.id]+=ax
             planetvy[self.id]+=ay
             planetvz[self.id]+=az
@@ -295,6 +310,8 @@ class Planet{
             self.mesh.position.x=planetx[self.id]
             self.mesh.position.y=planety[self.id]
             self.mesh.position.z=planetz[self.id]
+
+            planetv[self.id]=Math.sqrt((planetvx[self.id])**2+(planetvy[self.id])**2+(planetvz[self.id])**2)
             
             //self.mesh.position.x+=planetvx[self.id]
             //self.mesh.position.y+=planetvy[self.id]
@@ -368,6 +385,10 @@ class Planet{
                 //console.log(self.id)
                 //console.log(self.select.value)
                 if(self.select.value!=self.id){
+                    self.distancehtml.innerHTML=''
+                    self.div.removeChild(self.distancehtml)
+                    self.div.appendChild(self.distancehtml)
+                    
                     self.xposhtml.innerHTML=''
                 
                     self.div.removeChild(self.xposhtml)
@@ -398,9 +419,18 @@ class Planet{
                     self.div.removeChild(self.vzposhtml)
                     self.div.appendChild(self.vzposhtml)
 
+                    self.vhtml.innerHTML=''
+
+                    self.div.removeChild(self.vhtml)
+                    self.div.appendChild(self.vhtml)
+
                 }
                 
                 else{
+                    self.distancehtml.innerHTML='Distance: ' + Math.round(planetdistance[self.id]*10)/100 + ' AU'
+                    self.div.removeChild(self.distancehtml)
+                    self.div.appendChild(self.distancehtml)
+
                     self.xposhtml.innerHTML='X Position: ' + Math.round(planetx[self.id]*10)/100 + ' AU'
                 
                     self.div.removeChild(self.xposhtml)
@@ -430,6 +460,11 @@ class Planet{
                 
                     self.div.removeChild(self.vzposhtml)
                     self.div.appendChild(self.vzposhtml)
+
+                    self.vhtml.innerHTML='Resultant Velocity ' + Math.round(conversion(planetv[self.id])) + ' m/s'
+
+                    self.div.removeChild(self.vhtml)
+                    self.div.appendChild(self.vhtml)
 
                     currentid=self.id
                     currentname=self.name   
