@@ -22,10 +22,11 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';></body>
-<script src='/three.min.js'></script>
+<script src='three.min.js'></script>
 <script src='/threex.planets.js'></script>
 <script src='/threex.atmospherematerial.js'></script>
 <script src='/socket.io.js'></script>
+<script src='/crypto-js.js'></script>
 <script src='/simulator.js'></script>
 <script>
     let indexlogin=1
@@ -37,7 +38,7 @@
     simStart.camera.position.y=2
     simStart.camera.position.z=-5
     allupdate.push(function(){
-         if(simStart.camera.position.x<15){
+        if(simStart.camera.position.x<15){
              simStart.camera.position.x+=0.01
              
         }
@@ -63,18 +64,32 @@
     let signDivSignUp = document.getElementById('signUp');
 
     signDivSignIn.onclick = function(){
-        socket.emit('signIn',{username:signDivUsername.value,password:signDivPassword.value});
+        let hashed = CryptoJS.SHA256(signDivPassword.value);
+        socket.emit('signIn',{username:signDivUsername.value,password:hashed});
     }
     
     signDivSignUp.onclick = function(){
-        socket.emit('signUp',{username:signDivUsername.value,password:signDivPassword.value});
+        let hashed2 = CryptoJS.SHA256(signDivPassword.value);
+        socket.emit('signUp',{username:signDivUsername.value,password:hashed2});
     }
     
     socket.on('signInResponse',function(data){
         if(data.success){
             //signDiv.style.display = 'none';
             //gameDiv.style.display = 'inline-block';
-            alert("Sign in successful")
+            //location.href = 'index.html'
+            allupdate.push(function(){
+                if(simStart.camera.position.x>0 && simStart.camera.position.y>0.1 && simStart.camera.position.z<0){
+                    simStart.camera.position.x-=0.1
+                    simStart.camera.position.y-=0.005
+                    simStart.camera.position.z+=0.023
+                }
+                else{
+                    console.log('test')
+                    location.href='index.html'
+                }
+            })
+           
         } else
             alert("Sign in unsuccessful.");
     });
@@ -85,6 +100,7 @@
         } else
             alert("Sign up unsuccessful.");
     });
+
     
 </script>
 

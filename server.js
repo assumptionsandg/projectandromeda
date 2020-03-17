@@ -1,15 +1,15 @@
-var mongojs = require("mongojs");
-var db = mongojs('localhost:27017/projectAndromeda', ['account','progress']);
+const mongojs = require("mongojs");
+const db = mongojs('localhost:27017/andromeda', ['accounts','progress']);
 
-var express = require('express');
-var exp = express();
-var serv = require('http').Server(exp);
+const express = require('express');
+const exp = express();
+const serv = require('http').Server(exp);
 
-var io = require('socket.io').listen(8080)
+const io = require('socket.io').listen(8080)
 
 //server
 
-exp.get('/',function(req, res) {
+exp.get('/',function(req, res){
     res.sendFile(__dirname + '/login.html');
 });
 exp.use(express.static(__dirname));
@@ -17,8 +17,10 @@ exp.use(express.static(__dirname));
 serv.listen(8000);
 console.log("Server is running, it's gonna get away!");
 
-var isValidPassword = function(data,cb){
-    db.account.find({username:data.username,password:data.password},function(err,res){
+let SOCKET_LIST = []
+
+let isValidPassword = function(data,cb){
+    db.accounts.find({username:data.username,password:data.password},function(err,res){
         if(res.length > 0)
             cb(true);
         else
@@ -26,8 +28,8 @@ var isValidPassword = function(data,cb){
     });
  }
  
- var isUsernameTaken = function(data,cb){
-    db.account.find({username:data.username},function(err,res){
+let isUsernameTaken = function(data,cb){
+    db.accounts.find({username:data.username},function(err,res){
         if(res.length > 0)
             cb(true);
         else
@@ -35,8 +37,8 @@ var isValidPassword = function(data,cb){
     });
  }
     
- var addUser = function(data,cb){
-    db.account.insert({username:data.username,password:data.password},function(err){
+ let addUser = function(data,cb){
+    db.accounts.insert({username:data.username,password:data.password},function(err){
         cb();
     });
  }
@@ -48,7 +50,6 @@ var isValidPassword = function(data,cb){
     socket.on('signIn',function(data){
         isValidPassword(data,function(res){
             if(res){
-                Player.onConnect(socket);
                 socket.emit('signInResponse',{success:true});
             } else {
                 socket.emit('signInResponse',{success:false});         
@@ -70,21 +71,14 @@ var isValidPassword = function(data,cb){
    
     socket.on('disconnect',function(){
         delete SOCKET_LIST[socket.id];
-        Player.onDisconnect(socket);
-    });
- 
-    socket.on('sendMsgToServer',function(data){
-        var playerName = ("" + socket.id).slice(2,7);
-        for(var i in SOCKET_LIST){
-            SOCKET_LIST[i].emit('addToChat',playerName + ': ' + data);
-        }
     });
    
     socket.on('evalServer',function(data){
         if(!DEBUG)
             return;
-        var res = eval(data);
+        let res = eval(data);
         socket.emit('evalAnswer',res);     
     });
+
      
  });

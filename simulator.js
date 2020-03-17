@@ -13,6 +13,7 @@ let planetvx = []
 let planetvy = []
 let planetvz = []
 let planetv = []
+let vcamera=0
 
 let testcount=-1
 let currentid=0
@@ -98,7 +99,6 @@ class Star{
             self.mesh.position.x+=self.vx
             self.mesh.position.y+=self.vy
             self.mesh.position.z+=self.vz
-            console.log(globaldelta)
         })
     }
 
@@ -287,7 +287,6 @@ class Planet{
             rAx+=ax
             rAy+=ay
             rAz+=az
-            console.log(ax)
             // console.log(self.mesh.position.x)
             // console.log(self.mesh.position.y)
             // console.log(self.mesh.position.z)
@@ -755,10 +754,44 @@ class Andromeda{
 
         self.vector = {x:0,y:0}
 
+        document.onkeydown = function(event){
+            vcamera=0.1
+            if(event.keyCode === 68){
+                self.vector.x+=vcamera
+            }
+            else if(event.keyCode === 83){
+                self.vector.y-=vcamera
+            }
+            else if(event.keyCode === 65){
+                self.vector.x-=vcamera
+            }
+            else if(event.keyCode === 87){
+                self.vector.y+=vcamera
+            }
+        }
+        
+        document.onkeyup = function(event){
+            vcamera=0
+            if(event.keyCode === 68){
+                self.vector.x+=vcamera
+            }
+            else if(event.keyCode === 83){
+                self.vector.y-=vcamera
+            }
+            else if(event.keyCode === 65){
+                self.vector.x-=vcamera
+            }
+            else if(event.keyCode === 87){
+                self.vector.x-vcamera
+            }
+        }
+
+        /*
         document.addEventListener('mousemove', function(event){
             self.vector.x	= (event.clientX/window.innerWidth ) - 0.1
             self.vector.y	= (event.clientY/window.innerHeight) - 0.1
         }, false)
+        */
 
         if(indexlogin==0){
             allupdate.push(function(delta, now){
