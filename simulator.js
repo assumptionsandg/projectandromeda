@@ -28,7 +28,7 @@ let pcount=0
 let htmlcount=0
 let ispaused=0
 let globaldelta=0
-let timescale=6400000
+let timescale=6000000
 
 let inverseconvert = function(value){
     return ((value/(1/globaldelta))*timescale)/(1.496e+11)
@@ -723,12 +723,12 @@ class Andromeda{
 
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000 )
-        this.axes = new THREE.AxesHelper( 1000 );
-        this.scene.add( this.axes )
+        // this.axes = new THREE.AxesHelper( 1000 );
+        // this.scene.add( this.axes )
         this.light	= new THREE.AmbientLight( 0x888888 )
         this.scene.add( this.light )
         this.light	= new THREE.DirectionalLight( 0xcccccc, 1 )
-        this.light.position.set(5,5,5)
+        this.light.position.set(-1,-1,-1)
         this.scene.add( this.light )
         this.light.castShadow	= true
         this.light.shadowCameraNear	= 0.1
@@ -739,11 +739,27 @@ class Andromeda{
         this.light.shadowCameraRight	=  1
         this.light.shadowCameraTop	=  1
         this.light.shadowCameraBottom= -1
+
+        this.light	= new THREE.AmbientLight( 0x888888 )
+        this.scene.add( this.light )
+        this.light	= new THREE.DirectionalLight( 0xcccccc, 1 )
+        this.light.position.set(1,1,1)
+        this.scene.add( this.light )
+        this.light.castShadow	= true
+        this.light.shadowCameraNear	= 0.1
+        this.light.shadowCameraFar	= 15
+        this.light.shadowCameraFov	= 45
+
+        this.light.shadowCameraLeft	= -1
+        this.light.shadowCameraRight	=  1
+        this.light.shadowCameraTop	=  1
+        this.light.shadowCameraBottom= -1
+
         this.camera.lookAt(0,0,0)
         this.camera.position.z=-5
 
         this.light.shadowBias	= 0.001
-        this.light.shadowDarkness	= 0.2
+        this.light.shadowDarkness	= 0.1
 
         this.light.shadowMapWidth	= 1024*2
         this.light.shadowMapHeight	= 1024*2

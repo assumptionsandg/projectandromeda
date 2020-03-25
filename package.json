@@ -1,0 +1,36 @@
+{
+  "name": "projectandromeda",
+  "version": "1.0.0",
+  "description": "Current repo of Project Andromeda Development Stages | Version 0.03 aka The Spaghettiest of All Code",
+  "main": "server.js",
+  "dependencies": {
+    "angular": "^1.7.9",
+    "cookie-parser": "^1.4.5",
+    "crypto-js": "^4.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongojs": "^3.1.0",
+    "passport": "^0.4.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "socketio-auth": "^0.1.1",
+    "socketio-jwt": "^4.5.0",
+    "three": "^0.114.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/assumptionsandg/projectandromeda.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/assumptionsandg/projectandromeda/issues"
+  },
+  "homepage": "https://github.com/assumptionsandg/projectandromeda#readme"
+}

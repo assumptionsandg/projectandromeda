@@ -22,13 +22,14 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';></body>
-<script src='three.min.js'></script>
+<script src='/three.min.js'></script>
 <script src='/threex.planets.js'></script>
 <script src='/threex.atmospherematerial.js'></script>
 <script src='/socket.io.js'></script>
 <script src='/crypto-js.js'></script>
 <script src='/simulator.js'></script>
 <script>
+
     let indexlogin=1
     let simStart = new Andromeda()
     simStart.addtoPage()
@@ -47,7 +48,7 @@
     })
     
     simStart.add(new Earth('Earth',1,1/4,1,10,1,-5,1,1,0.001,0.001,0.03))
-    simStart.add(new EarthCloud('Earth',2,1/4,1,1,1,-5,1,1,0.001,0.001,0.03))
+    simStart.add(new EarthCloud('Earth',2,-1/4,1,1,1,-5,1,1,0.001,0.001,0.03))
     simStart.add(new Atmosphere('Earth',3,1/4,0,1,'blue',1,1.05,-5,1,1,0.001,0.001,0.03))
     simStart.add(new Mars('Mars',4,1/4,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
     simStart.add(new Jupiter('Jupiter',5,1/4,1,10,1,0,5,-1,0.001,0.001,0.03))
@@ -56,7 +57,10 @@
     simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
     simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
 
-    let socket=io('http://localhost:8080')
+    let token = sessionStorage.token;
+    let socket = io('http://localhost:8080',{
+        query:{token:token}
+    })
     let signDiv = document.getElementById('signDiv');
     let signDivUsername = document.getElementById('signDiv-username');
     let signDivPassword = document.getElementById('signDiv-password')
@@ -85,7 +89,6 @@
                     simStart.camera.position.z+=0.023
                 }
                 else{
-                    console.log('test')
                     location.href='index.html'
                 }
             })
