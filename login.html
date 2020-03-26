@@ -57,52 +57,147 @@
     simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
     simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
 
-    let token = sessionStorage.token;
-    let socket = io('http://localhost:8080',{
-        query:{token:token}
-    })
     let signDiv = document.getElementById('signDiv');
     let signDivUsername = document.getElementById('signDiv-username');
     let signDivPassword = document.getElementById('signDiv-password')
     let signDivSignIn = document.getElementById('signIn');
     let signDivSignUp = document.getElementById('signUp');
 
-    signDivSignIn.onclick = function(){
+    let base64url = function(source) {
+        encodedSource = CryptoJS.enc.Base64.stringify(source);
+
+        encodedSource = encodedSource.replace(/=+$/, '');
+
+        encodedSource = encodedSource.replace(/\+/g, '-');
+        encodedSource = encodedSource.replace(/\//g, '_');
+
+        return encodedSource;
+    }
+
+    signIn.onclick = function(){
         let hashed = CryptoJS.SHA256(signDivPassword.value);
-        socket.emit('signIn',{username:signDivUsername.value,password:hashed});
+            
+        let header = {
+            "alg": "HS256",
+            "typ": "JWT"
+        };
+
+        let stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+        let encodedHeader = base64url(stringifiedHeader);
+
+        let data = {
+            "id": 1337,
+            "username": signDivUsername.value,
+            "password": hashed,
+            "signup":false
+        };
+
+        let stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+        let encodedData = base64url(stringifiedData);
+
+        let token = encodedHeader + "." + encodedData;
+
+        let secret = "totally_not_an_unsecure_connection";
+
+        let signature = CryptoJS.HmacSHA256(token, secret);
+        signature = base64url(signature);
+
+        let signedToken = token + "." + signature;
+
+        sessionStorage.setItem('JWT',signedToken)
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        
+
+        socket.on('signInResponse',function(data){
+            if(data.success){
+                //signDiv.style.display = 'none';
+                //gameDiv.style.display = 'inline-block';
+                //location.href = 'index.html'
+                allupdate.push(function(){
+                    if(simStart.camera.position.x>0 && simStart.camera.position.y>0.1 && simStart.camera.position.z<0){
+                        simStart.camera.position.x-=0.1
+                        simStart.camera.position.y-=0.005
+                        simStart.camera.position.z+=0.023
+                    }
+                    else{
+                        location.href='index.html'
+                    }
+                })
+            
+            } else
+                alert("Sign in unsuccessful.");
+        });
+        
+        /*
+        signDivSignIn.onclick = function(){
+            socket.emit('signIn',{username:signDivUsername.value,password:hashed});
+        }
+
+        signDivSignUp.onclick = function(){
+            let hashed2 = CryptoJS.SHA256(signDivPassword.value);
+            socket.emit('signUp',{username:signDivUsername.value,password:hashed2});
+        }
+
+        
+
+        socket.on('signUpResponse',function(data){
+            if(data.success){
+                alert("Sign up successful.");
+            } else
+                alert("Sign up unsuccessful.");
+        });
+        */
     }
-    
-    signDivSignUp.onclick = function(){
-        let hashed2 = CryptoJS.SHA256(signDivPassword.value);
-        socket.emit('signUp',{username:signDivUsername.value,password:hashed2});
+
+    signUp.onclick = function(){
+        let hashed = CryptoJS.SHA256(signDivPassword.value);
+            
+        let header = {
+            "alg": "HS256",
+            "typ": "JWT"
+        };
+
+        let stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+        let encodedHeader = base64url(stringifiedHeader);
+
+        let data = {
+            "id": 1337,
+            "username": signDivUsername.value,
+            "password": hashed,
+            "signup":true
+        };
+
+        let stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+        let encodedData = base64url(stringifiedData);
+
+        let token = encodedHeader + "." + encodedData;
+
+        let secret = "weeb";
+
+        let signature = CryptoJS.HmacSHA256(token, secret);
+        signature = base64url(signature);
+
+        let signedToken = token + "." + signature;
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        socket.on('signUpResponse',function(data){
+            if(data.success){
+                alert("Sign up successful.");
+            } else
+                alert("Sign up unsuccessful.");
+        });
+
+
     }
-    
-    socket.on('signInResponse',function(data){
-        if(data.success){
-            //signDiv.style.display = 'none';
-            //gameDiv.style.display = 'inline-block';
-            //location.href = 'index.html'
-            allupdate.push(function(){
-                if(simStart.camera.position.x>0 && simStart.camera.position.y>0.1 && simStart.camera.position.z<0){
-                    simStart.camera.position.x-=0.1
-                    simStart.camera.position.y-=0.005
-                    simStart.camera.position.z+=0.023
-                }
-                else{
-                    location.href='index.html'
-                }
-            })
-           
-        } else
-            alert("Sign in unsuccessful.");
-    });
-    
-    socket.on('signUpResponse',function(data){
-        if(data.success){
-            alert("Sign up successful.");
-        } else
-            alert("Sign up unsuccessful.");
-    });
+
+  
 
     
 </script>

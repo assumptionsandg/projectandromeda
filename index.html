@@ -20,6 +20,7 @@
     <script src='/three.min.js'></script>
     <script src='/threex.planets.js'></script>
     <script src='/threex.atmospherematerial.js'></script>
+    <script src='/socket.io.js'></script>
     <script src='/simulator.js'></script>
     <script>
         let indexlogin=1
@@ -48,6 +49,23 @@
         //simStart.add(new Earth(10,1,1/4,1,10,-5,1,1,0.001,0.001,0.03))
         simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
         simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
+
+        let signedToken = sessionStorage.getItem('JWT')
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        socket.on('signInResponse',function(data){
+            if(data.success){
+                //signDiv.style.display = 'none';
+                //gameDiv.style.display = 'inline-block';
+                //location.href = 'index.html'
+                console.log('logged into index')
+            } else
+                alert("Authentication unsuccessful.");
+        });
+
     </script>
 </body>
 </html>

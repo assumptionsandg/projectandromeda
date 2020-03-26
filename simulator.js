@@ -161,35 +161,35 @@ class Planet{
         console.log(this.id)
         //console.log(this.isplanet)
         if(this.isplanet!=0 && this.div){
-        self.distancehtml=document.createElement('p')
-        self.distancehtml.innerHTML=''
-        self.xposhtml=document.createElement('p')
-        self.xposhtml.innerHTML=''
-        self.yposhtml=document.createElement('p')
-        self.yposhtml.innerHTML=''
-        self.zposhtml=document.createElement('p')
-        self.zposhtml.innerHTML=''
-        self.vxposhtml=document.createElement('p')
-        self.vxposhtml.innerHTML=''
-        self.vyposhtml=document.createElement('p')
-        self.vyposhtml.innerHTML=''
-        self.vzposhtml=document.createElement('p')
-        self.vzposhtml.innerHTML=''
-        self.vhtml=document.createElement('p')
-        self.vhtml.innerHTML=''
-        self.div.appendChild(self.distancehtml)
-        self.div.appendChild(self.xposhtml)
-        self.div.appendChild(self.yposhtml)
-        self.div.appendChild(self.zposhtml)
-        self.div.appendChild(self.vxposhtml)
-        self.div.appendChild(self.vyposhtml)
-        self.div.appendChild(self.vzposhtml)
-        self.div.appendChild(self.vhtml)
-        this.option.text =this.name
-        this.option.value=this.id
-        //globaloption=this.select.value
-        //this.modify.add(this.optiond)
-        this.select.add(this.option);
+            self.distancehtml=document.createElement('p')
+            self.distancehtml.innerHTML=''
+            self.xposhtml=document.createElement('p')
+            self.xposhtml.innerHTML=''
+            self.yposhtml=document.createElement('p')
+            self.yposhtml.innerHTML=''
+            self.zposhtml=document.createElement('p')
+            self.zposhtml.innerHTML=''
+            self.vxposhtml=document.createElement('p')
+            self.vxposhtml.innerHTML=''
+            self.vyposhtml=document.createElement('p')
+            self.vyposhtml.innerHTML=''
+            self.vzposhtml=document.createElement('p')
+            self.vzposhtml.innerHTML=''
+            self.vhtml=document.createElement('p')
+            self.vhtml.innerHTML=''
+            self.div.appendChild(self.distancehtml)
+            self.div.appendChild(self.xposhtml)
+            self.div.appendChild(self.yposhtml)
+            self.div.appendChild(self.zposhtml)
+            self.div.appendChild(self.vxposhtml)
+            self.div.appendChild(self.vyposhtml)
+            self.div.appendChild(self.vzposhtml)
+            self.div.appendChild(self.vhtml)
+            this.option.text =this.name
+            this.option.value=this.id
+            //globaloption=this.select.value
+            //this.modify.add(this.optiond)
+            this.select.add(this.option);
         }
         this.draw()
         this.update()

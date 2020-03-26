@@ -2,11 +2,11 @@ const mongojs = require("mongojs");
 const db = mongojs('localhost:27017/andromeda', ['accounts','progress']);
 
 const express = require('express');
-const session = require('express-session')
 const exp = express();
 const serv = require('http').Server(exp);
 
 const io = require('socket.io').listen(8080)
+const socketioJwt = require("socketio-jwt");
 
 //server
 
@@ -47,43 +47,58 @@ let addUser = function(data,cb){
     });
 }
 
+io.use(socketioJwt.authorize({
+    secret: 'totally_not_an_unsecure_connection',
+    handshake: true
+}));
+
 io.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
-    console.log('test')
-   
-    socket.on('signIn',function(data){
-        isValidPassword(data,function(res){
+        
+    if(socket.decoded_token.signup!=true){
+        console.log('authenticated ', socket.decoded_token.username);
+
+        isValidPassword({username:socket.decoded_token.username,password:socket.decoded_token.password},function(res){
             if(res){
                 socket.emit('signInResponse',{success:true});
-            } else {
-                socket.emit('signInResponse',{success:false});         
+                console.log(socket.decoded_token.username+' connection accepted!')
             }
+            else{
+                socket.emit('signInResponse',{success:false});
+                delete SOCKET_LIST[socket.id]
+                console.log(socket.decoded_token.username+' connection rejected!')
+            }
+        })
+        
+        /*
+        socket.on('disconnect',function(){
+            delete SOCKET_LIST[socket.id];
         });
-    });
     
-    socket.on('signUp',function(data){
-        isUsernameTaken(data,function(res){
+        socket.on('evalServer',function(data){
+            if(!DEBUG)
+                return;
+            let res = eval(data);
+            socket.emit('evalAnswer',res);     
+        });
+        */
+    }
+
+    else{
+        isUsernameTaken({username:socket.decoded_token.username,password:socket.decoded_token.password},function(res){
             if(res){
-                socket.emit('signUpResponse',{success:false});     
-            } else {
-                addUser(data,function(){
-                    socket.emit('signUpResponse',{success:true});                  
-                });
+                socket.emit('signUpResponse',{success:false});
             }
-        });    
-    });
-    
-    socket.on('disconnect',function(){
-        delete SOCKET_LIST[socket.id];
-    });
+            else{
+                addUser({username:socket.decoded_token.username,password:socket.decoded_token.password},function(){
+                    socket.emit('signUpResponse',{success:true});
+                })
+            }
+        })
+
+    }
    
-    socket.on('evalServer',function(data){
-        if(!DEBUG)
-            return;
-        let res = eval(data);
-        socket.emit('evalAnswer',res);     
-    });
 
      
 });
