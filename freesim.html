@@ -67,6 +67,7 @@
     <script src='three.min.js'></script>
     <script src='threex.planets.js'></script>
     <script src='threex.atmospherematerial.js'></script>
+    <script src='socket.io.js'></script>
     <script src='simulator.js'></script>
     <script>
         let indexlogin=0
@@ -76,5 +77,39 @@
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
   
+        let signedToken = sessionStorage.getItem('JWT')
+        let username = sessionStorage.getItem('user')
+
+        let loggedin = document.createElement('p')
+        loggedin.innerText = 'Currently logged in as: '+username
+        document.body.appendChild(loggedin)
+
+        if(signedToken==null){
+            location.href='./'
+        }
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        socket.on('signInResponse',function(data){
+            if(data.success){
+                //signDiv.style.display = 'none';
+                //gameDiv.style.display = 'inline-block';
+                //location.href = 'index.html'
+                socket.emit('checkfreesim')
+            } else{
+                location.href='./'
+            }
+                // alert("Authentication unsuccessful.");
+        });
+
+        socket.on('isfreesim',function(data){
+            if(data.isfreesim==false){
+                location.href='index.html'
+            }
+        })
+
+
     </script>
 </body>

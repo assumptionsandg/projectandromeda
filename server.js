@@ -27,29 +27,67 @@ let isValidPassword = function(data,cb){
         if(res.length > 0){
             cb(true);
         }
-        else
+        else{
             cb(false);
+        }
     });
 }
 
 let isUsernameTaken = function(data,cb){
     db.accounts.find({username:data.username},function(err,res){
-        if(res.length > 0)
+        if(res.length > 0){
             cb(true);
-        else
+        }
+        else{
             cb(false);
+        }
     });
 }
 
 let addUser = function(data,cb){
-    db.accounts.insert({username:data.username,password:data.password},function(err){
+    db.accounts.insert({username:data.username,password:data.password,freesim:false,admin:false},function(err){
+        cb();
+    });
+    db.progress.insert({username:data.username,completed:0},function(err){
         cb();
     });
 }
 
+let updateProgress = function(data,cb){
+    db.progress.find({username:data.username},function(err,res){
+        if(res[0].completed<data.completed){
+            db.progress.update({username:data.username},{$set:{completed:data.completed}},{multi:true},function(err){
+                cb();
+            });
+        }
+    })
+}
+
+let freesimAccess = function(data,cb){
+    db.accounts.find({username:data.username},function(err,res){
+        if(res[0].freesim==true){
+            cb(true)
+        }
+        else{
+            cb(false)
+        }
+    })
+}
+
+let isAdmin = function(data,cb){
+    db.accounts.find({username:data.username},function(err,res){
+        if(res[0].admin==true){
+            cb(true)
+        }
+        else{
+            cb(false)
+        }
+    })
+}
+
 io.use(socketioJwt.authorize({
     secret: 'totally_not_an_unsecure_connection',
-    handshake: true
+    handshake: true,
 }));
 
 io.on('connection', function(socket){
@@ -57,7 +95,7 @@ io.on('connection', function(socket){
     SOCKET_LIST[socket.id] = socket;
         
     if(socket.decoded_token.signup!=true){
-        console.log('authenticated ', socket.decoded_token.username);
+        console.log('authenticated '+socket.decoded_token.username);
 
         isValidPassword({username:socket.decoded_token.username,password:socket.decoded_token.password},function(res){
             if(res){
@@ -70,6 +108,8 @@ io.on('connection', function(socket){
                 console.log(socket.decoded_token.username+' connection rejected!')
             }
         })
+
+      
         
         /*
         socket.on('disconnect',function(){
@@ -98,6 +138,36 @@ io.on('connection', function(socket){
         })
 
     }
+
+    socket.on('checkfreesim',function(){
+        freesimAccess({username:socket.decoded_token.username},function(res){
+            if(res){
+                socket.emit('isfreesim',{isfreesim:true})
+            }
+            else{
+                socket.emit('isfreesim',{isfreesim:false})
+            }
+        })
+    })
+
+    socket.on('checkadmin',function(){
+        isAdmin({username:socket.decoded_token.username},function(res){
+            if(res){
+                socket.emit('isadmin',{isadmin:true})
+            }
+            else{
+                socket.emit('isadmin',{isadmin:false})
+            }
+        })
+    })
+
+    socket.on('tutorial',function(data){
+        updateProgress({username:socket.decoded_token.username,completed:data},function(){
+            console.log(socket.decoded_token.username+' completed tutorial: '+data)
+        })
+    })
+
+  
    
 
      

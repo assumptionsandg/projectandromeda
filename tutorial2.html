@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<link rel='stylesheet' type='text/css' href='/tutorialstyle.css'>
+<title>Project Andromeda</title>
+<h1>Project Andromeda</h1>
+
+<div class='tutorialbox' style='position:absolute;'>
+    <div class='slide'>
+        <p>Welcome to the second tutorial!</p>
+        <p>In this tutorial you will learn basic motion and units.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>Units:</p>
+        <p>An Astronomical Unit (AU) is a unit of distance where 1 AU is the distance between the Earth and Sun.</p>
+        <p>As you can see in the 'info box', the Earth remains approximately 1 AU from the Sun for the duration of it's orbit.</p>
+        <p>This distance is calculated using the Pythangorean Theorem, meaning that if the distance between the star is always 1 AU, the orbit of Earth will be circular.</p>
+        <p>In reality, the orbit of Earth isn't perfectly circular, however it is close enough for us to approximate.</p>
+        <p>In more advanced planetary motion, we refer to the shape of it's orbit as it's eccentrcity.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>Units:</p>
+        <p>Meters per Second (m/s) is a unit of velocity, refering to how many meters (unit of distance) can be covered in 1 second.</p>
+        <p>In the 'info box', you can see that the Earth is usually travelling at 30000m/s</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>You have completed the second tutorial!</p>
+        <p>Press next to be sent to the third tutorial.</p>
+    </div>
+    <button class='prev' id='prev'>Previous</button>
+    <button class='next' id='next'>Next</button>
+</div>
+
+<div class='vertibox' style='position:absolute;'>
+    <p>Version 0.03 'Slightly Less Oof' Build</p>
+    <button id='myBtn'>Add New Planet</button>
+
+    <div id='myModal' class='modal'>
+
+    <div class='modal-content'>
+        <div class='modal-body'>
+            <span class='close'>&times;</span>
+            <p>Add New Planet Menu:</p>
+            <p>Distance in AU | Velocity in m/s</p>
+            <select id='selectpreset'>
+            </select>
+            <!-- <input type='number' id='nameplanet' placeholder='Enter Planet Name'></input>             -->
+            <input type='number' id='planetid' placeholder='Enter Planet ID'></input>
+            <input type='number' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
+            <input type='number' id='rot' placeholder='Enter Rotation'></input>
+            <input type='number' id='xpos' placeholder='Enter X Position'></input>
+            <input type='number' id='ypos' placeholder='Enter Y Position'></input>
+            <input type='number' id='zpos' placeholder='Enter Z Position'></input>
+            <input type='number' id='vxval' placeholder='Enter X Velocity'></input>
+            <input type='number' id='vyval' placeholder='Enter Y Velocity'></input>
+            <input type='number' id='vzval' placeholder='Enter Z Velocity'></input>
+        </div>
+        <div class='modal-footer'>
+            <a id='newMod'>Add Planet</a>
+        </div>
+    </div>
+
+    </div>
+    <button>Add New Star</button>
+</div>
+
+<div class='infobox' id='infoboxd' style='position:absolute;'>
+    <select id='changeplanet'></select>
+</div>
+
+<div class='bottombox' id='bottomboxd'>
+    <input type='text' id='newxpos' placeholder='Enter X Position'></input>
+    <input type='text' id='newypos' placeholder='Enter Y Position'></input>
+    <input type='text' id='newzpos' placeholder='Enter Z Position'></input>
+    <input type='text' id='newvx' placeholder='Enter X Velocity'></input>
+    <input type='text' id='newvy' placeholder='Enter Y Velocity'></input>
+    <input type='text' id='newvz' placeholder='Enter Z Velocity'></input>
+    <select id='modifyplanet'></select>
+    <button id='play'>Play</button>
+    <button id='pause'>Pause</button>
+    <button id='mod'>Modify</button>
+</div>
+
+<body style='margin: 0px; background-color: #000000; overflow: hidden';>
+    <script src='three.min.js'></script>
+    <script src='threex.planets.js'></script>
+    <script src='threex.atmospherematerial.js'></script>
+    <script src='socket.io.js'></script>
+    <script src='simulator.js'></script>
+    <script>
+        let indexlogin=0
+        let simStart = new Andromeda()
+        simStart.addtoPage()
+        simStart.add(new starField())
+        simStart.add(new Star(10,0,0,0,0,0,0,0))
+        simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
+        
+        let signedToken = sessionStorage.getItem('JWT')
+        let username = sessionStorage.getItem('user')
+
+        if(signedToken==null){
+            location.href='./'
+        }
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        socket.on('signInResponse',function(data){
+            if(data.success){
+                //signDiv.style.display = 'none';
+                //gameDiv.style.display = 'inline-block';
+                //location.href = 'index.html'
+                console.log('logged into index')
+            } else{
+                location.href='./'
+            }
+                // alert("Authentication unsuccessful.");
+        });
+
+        let slideIndex = 1;
+        showSlides(1)
+
+        prev.onclick = function(){
+            if(slideIndex>1){
+                plusSlides(-1)
+            }
+        }
+
+        next.onclick = function(){
+            if(slideIndex<4){
+                plusSlides(1)
+            }
+            else{
+                socket.emit('tutorial',2)
+                location.href='tutorial3.html'
+                console.log('test')
+            }
+        }
+
+        function plusSlides(n) {
+        showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide");
+        if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+            }
+        slides[slideIndex-1].style.display = "block";
+        }
+
+        let newxpos = document.getElementById('newxpos')
+        newxpos.innerText='1'
+
+    </script>
+</body>

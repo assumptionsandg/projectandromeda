@@ -8,13 +8,16 @@
 <body style='margin: 0px; background-color: #000000; overflow: hidden;'>    
     <h1>Welcome to Project Andromeda</h1>
     <div id='tutorials'>
-        <p>Tutorials</p>
+        <p id='divt'>Tutorials</p>
+        <a id='divbuttont'></a>
     </div>
     <div id='freesim'>
-        <p>The Free Simulator</p>
+        <p id='divp'>The Free Simulator</p>
+        <a id='divbuttonp'></a>
     </div>
     <div id='database'>
-        <p>Database</p>
+        <p id='divd'>Database</p>
+        <a id='divbuttond'></a>
     </div>
 
     <script src='/three.min.js'></script>
@@ -24,13 +27,15 @@
     <script src='/simulator.js'></script>
     <script>
         let indexlogin=1
+        let admin=0
+        let freesim=0
+
         let simStart = new Andromeda()
         simStart.addtoPage()
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
         simStart.camera.position.x=1
-        //simStart.camera.position.z=-5
         allupdate.push(function(){
             if(simStart.camera.position.x<25){
                 simStart.camera.position.x+=0.1
@@ -46,11 +51,19 @@
         simStart.add(new Mars('Mars',4,1/4,1,10,1,5,-1,-1,-0.001,-0.001,-0.03))
         simStart.add(new Jupiter('Jupiter',5,1/4,1,10,1,0,5,-1,0.001,0.001,0.03))
 
-        //simStart.add(new Earth(10,1,1/4,1,10,-5,1,1,0.001,0.001,0.03))
         simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
         simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
 
         let signedToken = sessionStorage.getItem('JWT')
+        let username = sessionStorage.getItem('user')
+
+        let loggedin = document.createElement('h2')
+        loggedin.innerText = 'Currently logged in as: '+username
+        document.body.appendChild(loggedin)
+
+        if(signedToken==null){
+            location.href='./'
+        }
 
         let socket = io('http://localhost:8080',{
             'query':'token='+signedToken
@@ -62,9 +75,44 @@
                 //gameDiv.style.display = 'inline-block';
                 //location.href = 'index.html'
                 console.log('logged into index')
-            } else
-                alert("Authentication unsuccessful.");
+                socket.emit('checkfreesim')
+                socket.emit('checkadmin')
+            } else{
+                location.href='./'
+            }
+                // alert("Authentication unsuccessful.");
         });
+
+        socket.on('isfreesim',function(data){
+            if(data.isfreesim){
+                freesim=1
+            }
+        })
+
+        socket.on('isadmin',function(data){
+            if(data.isadmin){
+                admin=1
+            }
+        })
+
+        divbuttonp.onclick = function(){
+            if(freesim==1){
+                location.href='freesim.html'
+            }
+            else{
+                alert('Complete the tutorials first')
+            }
+        }
+
+        divbuttond.onclick = function(){
+            if(admin==1){
+                location.href='adminpanel.html'
+            }
+            else{
+                alert('Not an admin')
+            }
+        }
+
 
     </script>
 </body>

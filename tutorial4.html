@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<link rel='stylesheet' type='text/css' href='/tutorialstyle.css'>
+<title>Project Andromeda</title>
+<h1>Project Andromeda</h1>
+
+<div class='tutorialbox' style='position:absolute;'>
+    <div class='slide'>
+        <p>Welcome to the fourth tutorial!</p>
+        <p>In this tutorial you will learn planetary motion in all dimensions.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>In the previous tutorial you learned planetary motion in one dimension.</p>
+        <p>As you can see, Jupiter is currently located at the position (-1,0.2,-0.7)</p>
+        <p>Jupiter also has an inital velocity of n m/s in the x-axis.</p>
+        <p>Press play to see Jupiter move.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>As you can see Jupiter is moving in a approximate circular orbit.</p>
+        <p>Since the force of gravity is calculated in all dimensions, if the planet has the correct velocity it will move in a circular orbit.</p>
+        <p>If the velocity was too small, the force from the Sun would overcome the velocity and Jupiter wouldn't move in a circular orbit, it would be much more eliptical.</p>
+        <p>If the velocity was small enough, Jupiter would fall into the sun.</p>
+        <p>If the velocity was too large, the force from the Sun would not be sufficient and Jupiter wouldn't move in a circular orbit, it would be much more eliptical.</p>
+        <p>If the velocity was large enough, Jupiter wouldn't be affected by the force from the Sun.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>You have completed the fourth tutorial!</p>
+        <p>Press next to be sent to the final tutorial.</p>
+    </div>
+    <button class='prev' id='prev'>Previous</button>
+    <button class='next' id='next'>Next</button>
+</div>
+
+<div class='vertibox' style='position:absolute;'>
+    <p>Version 0.03 'Slightly Less Oof' Build</p>
+    <button id='myBtn'>Add New Planet</button>
+
+    <div id='myModal' class='modal'>
+
+    <div class='modal-content'>
+        <div class='modal-body'>
+            <span class='close'>&times;</span>
+            <p>Add New Planet Menu:</p>
+            <p>Distance in AU | Velocity in m/s</p>
+            <select id='selectpreset'>
+            </select>
+            <!-- <input type='number' id='nameplanet' placeholder='Enter Planet Name'></input>             -->
+            <input type='number' id='planetid' placeholder='Enter Planet ID'></input>
+            <input type='number' id='massvalue' name='massvalue' placeholder='Enter Mass Value'></input>
+            <input type='number' id='rot' placeholder='Enter Rotation'></input>
+            <input type='number' id='xpos' placeholder='Enter X Position'></input>
+            <input type='number' id='ypos' placeholder='Enter Y Position'></input>
+            <input type='number' id='zpos' placeholder='Enter Z Position'></input>
+            <input type='number' id='vxval' placeholder='Enter X Velocity'></input>
+            <input type='number' id='vyval' placeholder='Enter Y Velocity'></input>
+            <input type='number' id='vzval' placeholder='Enter Z Velocity'></input>
+        </div>
+        <div class='modal-footer'>
+            <a id='newMod'>Add Planet</a>
+        </div>
+    </div>
+
+    </div>
+    <button>Add New Star</button>
+</div>
+
+<div class='infobox' id='infoboxd' style='position:absolute;'>
+    <select id='changeplanet'></select>
+</div>
+
+<div class='bottombox' id='bottomboxd'>
+    <input type='text' id='newxpos' placeholder='Enter X Position'></input>
+    <input type='text' id='newypos' placeholder='Enter Y Position'></input>
+    <input type='text' id='newzpos' placeholder='Enter Z Position'></input>
+    <input type='text' id='newvx' placeholder='Enter X Velocity'></input>
+    <input type='text' id='newvy' placeholder='Enter Y Velocity'></input>
+    <input type='text' id='newvz' placeholder='Enter Z Velocity'></input>
+    <select id='modifyplanet'></select>
+    <button id='play'>Play</button>
+    <button id='pause'>Pause</button>
+    <button id='mod'>Modify</button>
+</div>
+
+<body style='margin: 0px; background-color: #000000; overflow: hidden';>
+    <script src='three.min.js'></script>
+    <script src='threex.planets.js'></script>
+    <script src='threex.atmospherematerial.js'></script>
+    <script src='socket.io.js'></script>
+    <script src='simulator.js'></script>
+    <script>
+        let indexlogin=0
+        let simStart = new Andromeda()
+        simStart.addtoPage()
+        simStart.add(new starField())
+        simStart.add(new Star(10,0,0,0,0,0,0,0))
+        simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
+        
+        let signedToken = sessionStorage.getItem('JWT')
+        let username = sessionStorage.getItem('user')
+
+        if(signedToken==null){
+            location.href='./'
+        }
+
+        let socket = io('http://localhost:8080',{
+            'query':'token='+signedToken
+        })
+
+        socket.on('signInResponse',function(data){
+            if(data.success){
+                //signDiv.style.display = 'none';
+                //gameDiv.style.display = 'inline-block';
+                //location.href = 'index.html'
+                console.log('logged into index')
+            } else{
+                location.href='./'
+            }
+                // alert("Authentication unsuccessful.");
+        });
+
+        let slideIndex = 1;
+        showSlides(1)
+
+        prev.onclick = function(){
+            if(slideIndex>1){
+                plusSlides(-1)
+            }
+        }
+
+        next.onclick = function(){
+            if(slideIndex<4){
+                plusSlides(1)
+            }
+            else{
+                socket.emit('tutorial',4)
+                location.href='tutorial5.html'
+                console.log('test')
+            }
+        }
+
+        function plusSlides(n) {
+        showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide");
+        if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+            }
+        slides[slideIndex-1].style.display = "block";
+        }
+
+        let newxpos = document.getElementById('newxpos')
+        newxpos.innerText='1'
+
+    </script>
+</body>
