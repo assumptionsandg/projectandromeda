@@ -1,5 +1,5 @@
 const mongojs = require("mongojs");
-const db = mongojs('localhost:27017/andromeda', ['accounts','progress']);
+const db = mongojs('localhost:27017/andromeda', ['accounts','progress','questions','answers']);
 
 const express = require('express');
 const exp = express();
@@ -21,6 +21,7 @@ console.log("Server is running, it's gonna get away!");
 
 
 let SOCKET_LIST = []
+let questionTransfer;
 
 let isValidPassword = function(data,cb){
     db.accounts.find({username:data.username,password:data.password},function(err,res){
@@ -85,6 +86,43 @@ let isAdmin = function(data,cb){
     })
 }
 
+let correctTutorial = function(data,cb){
+    db.progress.find({username:data.username},function(err,res){
+        if(res[0].completed<=data.completed){
+            cb(true)
+        }
+        else{
+            cb(false)
+        }
+    })
+}
+
+let getQuestions = function(){
+    db.questions.find(function(res){
+        questionTransfer=res
+    })
+}
+
+let addQuestions = function(data,cb){
+    db.questions.insert({question1:data.question1,question2:data.question2,question3:data.question3,question4:data.question4,question5:data.question5,question6:data.question6,question7:data.question7,question8:data.question8,question9:data.question9,question10:data.question10},function(res){
+        cb()
+    })
+    db.answers.insert({question1:data.question1,question2:data.question2,question3:data.question3,question4:data.question4,question5:data.question5,question6:data.question6,question7:data.question7,question8:data.question8,question9:data.question9,question10:data.question10},function(res){
+        cb()
+    })
+}
+
+let submitAnswers = function(data,cb){
+    db.answers.find({question1:data.question1,question2:data.question2,question3:data.question3,question4:data.question4,question5:data.question5,question6:data.question6,question7:data.question7,question8:data.question8,question9:data.question9,question10:data.question10},function(res){
+        if(res.length > 0){
+            cb(true)
+        }
+        else{
+            cb(false)
+        }
+    })
+}
+
 io.use(socketioJwt.authorize({
     secret: 'totally_not_an_unsecure_connection',
     handshake: true,
@@ -108,21 +146,6 @@ io.on('connection', function(socket){
                 console.log(socket.decoded_token.username+' connection rejected!')
             }
         })
-
-      
-        
-        /*
-        socket.on('disconnect',function(){
-            delete SOCKET_LIST[socket.id];
-        });
-    
-        socket.on('evalServer',function(data){
-            if(!DEBUG)
-                return;
-            let res = eval(data);
-            socket.emit('evalAnswer',res);     
-        });
-        */
     }
 
     else{
@@ -136,7 +159,6 @@ io.on('connection', function(socket){
                 })
             }
         })
-
     }
 
     socket.on('checkfreesim',function(){
@@ -167,9 +189,43 @@ io.on('connection', function(socket){
         })
     })
 
+    socket.on('tutorialvalidate',function(data){
+        correctTutorial({username:socket.decoded_token.username,completed:data},function(res){
+            if(res){
+                socket.emit('correcttutorial',{correct:true})
+            }
+            else{
+                socket.emit('correcttutorial',{correct:false})
+            }
+        })
+    })
+
+    socket.on('receivequestions',function(data){
+        getQuestions()
+        console.log(questionTransfer)
+    })
+
+    socket.on('addquestions',function(data){
+        addQuestions({question1:data.question1,question2:data.question2,question3:data.question3,question4:data.question4,question5:data.question5,question6:data.question6,question7:data.question7,question8:data.question8,question9:data.question9,question10:data.question10},function(res){
+            if(res){
+                console.log('Added question set')
+            }
+            else{
+                console.log('Failed to add question set')
+            }
+        })
+    })
   
-   
+    socket.on('submitanswers',function(data){
+        submitAnswers({question1:data.question1,question2:data.question2,question3:data.question3,question4:data.question4,question5:data.question5,question6:data.question6,question7:data.question7,question8:data.question8,question9:data.question9,question10:data.question10},function(res){
+            if(res){
+                socket.emit('answerresponse',{correct:true})
+            }
+            else{
+                socket.emit('answerresponse',{correct:false})
+            }
+        })
+    })
 
      
 });
-

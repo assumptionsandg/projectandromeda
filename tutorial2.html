@@ -95,7 +95,7 @@
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
-        
+
         let signedToken = sessionStorage.getItem('JWT')
         let username = sessionStorage.getItem('user')
 
@@ -113,11 +113,21 @@
                 //gameDiv.style.display = 'inline-block';
                 //location.href = 'index.html'
                 console.log('logged into index')
+                socket.emit('tutorialvalidate',2)
             } else{
                 location.href='./'
             }
                 // alert("Authentication unsuccessful.");
         });
+
+        socket.on('correcttutorial',function(data){
+            if(data.correct){
+                console.log('validated')
+            }
+            else{
+                location.href='./'
+            }
+        })        
 
         let slideIndex = 1;
         showSlides(1)

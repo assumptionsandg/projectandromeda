@@ -22,14 +22,15 @@
     <div class='slide'>
         <p>The Info Box:</p>
         <p>The 'Info Box' displays the current position/velocity of the planet in Astronomical Units (AU) and Meters per Second (m/s).</p>
-        <p>Currently the planet isn't moving so the readings will not change.</p>
-        <p>Press the 'play' button to see the planet move.</p>
+        <p>To see the readings at any particular point in time, press the 'pause' button to pause the simulation.</p>
+        <p>To let the simulation continue, press the 'play' button.</p>
         <p>Press next to continue.</p>
     </div>
     <div class='slide'>
         <p>The Mofiy Box:</p>
         <p>The 'Modify Box' will allow you to modify the position/velocity of the planet in real time</p>
-        <p>Values have already been entered, so press the 'modify' button.</p>
+        <p>Enter the following values to move the planet 2 AU away in the x-axis:</p>
+        <p>{X:-2,Y:0,Z:0,VX:0,VY:0,VZ:17000}</p>
         <p>Press next to continue.</p>
     </div>
     <div class='slide'>
@@ -104,9 +105,9 @@
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
         
-    simStart.add(new Earth('Earth',1,1/4,1,10,1,-5,1,1,0.001,0.001,0.03))
-    simStart.add(new EarthCloud('Earth',2,-1/4,1,1,1,-5,1,1,0.001,0.001,0.03))
-    simStart.add(new Atmosphere('Earth',3,1/4,0,1,'blue',1,1.05,-5,1,1,0.001,0.001,0.03))
+        simStart.add(new Earth('Earth',1,1/4,1,10,1,-5,1,1,0.001,0.001,0.03))
+        simStart.add(new EarthCloud('Earth',2,-1/4,1,1,1,-5,1,1,0.001,0.001,0.03))
+        simStart.add(new Atmosphere('Earth',3,1/4,0,1,'blue',1,1.05,-5,1,1,0.001,0.001,0.03))
 
         let signedToken = sessionStorage.getItem('JWT')
         let username = sessionStorage.getItem('user')

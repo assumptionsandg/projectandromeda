@@ -120,11 +120,22 @@
                 //gameDiv.style.display = 'inline-block';
                 //location.href = 'index.html'
                 console.log('logged into index')
+                socket.emit('tutorialvalidate',3)
             } else{
                 location.href='./'
             }
                 // alert("Authentication unsuccessful.");
         });
+
+        socket.on('correcttutorial',function(data){
+            if(data.correct){
+                console.log('validated')
+            }
+            else{
+                location.href='./'
+            }
+        })        
+
 
         let slideIndex = 1;
         showSlides(1)
