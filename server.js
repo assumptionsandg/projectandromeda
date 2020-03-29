@@ -11,7 +11,7 @@ const socketioJwt = require("socketio-jwt");
 //server
 
 exp.get('/',function(req, res){
-    res.sendFile(__dirname + '/login.html');
+    res.sendFile(__dirname + '/client/html/login.html');
 });
 
 exp.use(express.static(__dirname));
@@ -61,7 +61,7 @@ let updateProgress = function(data,cb){
                 cb();
             });
         }
-    })
+    });
 }
 
 let freesimAccess = function(data,cb){
@@ -72,7 +72,7 @@ let freesimAccess = function(data,cb){
         else{
             cb(false)
         }
-    })
+    });
 }
 
 let isAdmin = function(data,cb){
@@ -83,7 +83,7 @@ let isAdmin = function(data,cb){
         else{
             cb(false)
         }
-    })
+    });
 }
 
 let correctTutorial = function(data,cb){
@@ -94,7 +94,7 @@ let correctTutorial = function(data,cb){
         else{
             cb(false)
         }
-    })
+    });
 }
 
 let getQuestions = function(){

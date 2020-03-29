@@ -6,25 +6,27 @@
 <title>Project Andromeda</title>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden;'>    
-    <h1>Welcome to Project Andromeda</h1>
-    <div id='tutorials'>
-        <p id='divt'>Tutorials</p>
-        <a id='divbuttont'></a>
+    <h1>Welcome to Project Andromeda Admin</h1>
+    <div id='users'>
+        <p id='divt'>Users</p>
     </div>
-    <div id='freesim'>
-        <p id='divp'>The Free Simulator</p>
-        <a id='divbuttonp'></a>
+    <div id='progress'>
+        <p id='divp'>Progress</p>
     </div>
-    <div id='database'>
-        <p id='divd'>Database</p>
-        <a id='divbuttond'></a>
+    <div id='questions'>
+        <p id='divd'>Add Questions</p>
+        <a id='submitquestions'>Add</a>
+    </div>
+    <div id='answers'>
+        <p id='divd'>Add Answers</p>
+        <a id='submitanswers'>Add</a>
     </div>
 
-    <script src='/three.min.js'></script>
-    <script src='/threex.planets.js'></script>
-    <script src='/threex.atmospherematerial.js'></script>
-    <script src='/socket.io.js'></script>
-    <script src='/simulator.js'></script>
+    <script src='../../libraries/three.min.js'></script>
+    <script src='../../libraries/threex.planets.js'></script>
+    <script src='../../libraries/threex.atmospherematerial.js'></script>
+    <script src='../../libraries/socket.io.js'></script>
+    <script src='../../simulator.js'></script>
     <script>
         let indexlogin=1
         let admin=0
@@ -66,7 +68,6 @@
                 //gameDiv.style.display = 'inline-block';
                 //location.href = 'index.html'
                 console.log('logged into index')
-                socket.emit('checkfreesim')
                 socket.emit('checkadmin')
             } else{
                 location.href='./'

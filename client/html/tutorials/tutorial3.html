@@ -5,23 +5,35 @@
 
 <div class='tutorialbox' style='position:absolute;'>
     <div class='slide'>
-        <p>Welcome to the final tutorial!</p>
-        <p>In this tutorial you will create a solar system up to Mars.</p>
+        <p>Welcome to the third tutorial!</p>
+        <p>In this tutorial you will learn planetary motion in one dimension.</p>
         <p>Press next to continue.</p>
     </div>
     <div class='slide'>
-        <p>You will use your knowledge of the simulator (Tutorial 1) and your knowledge of planetary motion (Tutorial 2-4) to create a solar system up to Mars.</p>
-        <p>The Neccesary Data is on the next page.</p>
+        <p>Newton's Universal Law of Gravitation gives us a relationship between the force on a planetary body based on the mass of a star and the distance from that star squared.</p>
+        <p>The mass from the Earth is neglible to the mass of the Sun, so the Sun will feel a very small force from the Earth.</p>
+        <p>The force on the Earth from the Sun however is much larger, and due to this the Earth will accelerate in the direction of the sun.</p>
+        <p>This force will be smaller if the Earth is further away, and if the Sun has a smaller mass.</p>
+        <p>Press next to continue.</p>
     </div>
     <div class='slide'>
-        <p>Mercury: {Distance: 0.387AU, Average Velocity: 47362m/s}</p>
-        <p>Venus: {Distance: 0.723AU, Average Velocity: 35020m/s}</p>
-        <p>Earth: {Distance: 1AU, Average Velocity: 29780m/s}</p>
-        <p>Mars: {Distance: 1.524AU, Average Velocity: 24007m/s}</p>
+        <p>Currently the simulation is paused, and the Earth is a distance of -1 AU away in the x-axis</p>
+        <p>Due to the force described earlier (the force of gravity from the sun), the Earth will accelerate towards the Sun.</p>
+        <p>Press play now, and observe the Earth collide with the Sun.</p>
+        <p>As the Earth gets closer to the Sun, the acceleration will increase due to the distance decreasing.</p>
+        <p>The Sun has a point mass, meaning that when the Earth reaches the Sun's exact position, the distance between the Earth and the Sun is now 0.</p>
+        <p>Due to this, the Earth will have infinite acceleration, and therefore be shot away immediately.</p>
+        <p>Press next to continue.</p>
     </div>
     <div class='slide'>
-        <p>You have completed the all the tutorials!</p>
-        <p>Press next to be sent to the test.</p>
+        <p>This will be the same in every other dimension too.</p>
+        <p>Mars is currently at a distance of 1 AU in the z-axis.</p>
+        <p>If you press play, you will observe the same effect as before.</p>
+        <p>Press next to continue.</p>
+    </div>
+    <div class='slide'>
+        <p>You have completed the third tutorial!</p>
+        <p>Press next to be sent to the fourth tutorial.</p>
     </div>
     <button class='prev' id='prev'>Previous</button>
     <button class='next' id='next'>Next</button>
@@ -78,11 +90,11 @@
 </div>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden';>
-    <script src='three.min.js'></script>
-    <script src='threex.planets.js'></script>
-    <script src='threex.atmospherematerial.js'></script>
-    <script src='socket.io.js'></script>
-    <script src='simulator.js'></script>
+    <script src='../../../libraries/three.min.js'></script>
+    <script src='../../../libraries/threex.planets.js'></script>
+    <script src='../../../libraries/threex.atmospherematerial.js'></script>
+    <script src='../../../libraries/socket.io.js'></script>
+    <script src='../../../simulator.js'></script>
     <script>
         let indexlogin=0
         let simStart = new Andromeda()
@@ -108,7 +120,7 @@
                 //gameDiv.style.display = 'inline-block';
                 //location.href = 'index.html'
                 console.log('logged into index')
-                socket.emit('tutorialvalidate',5)
+                socket.emit('tutorialvalidate',3)
             } else{
                 location.href='./'
             }
@@ -124,6 +136,7 @@
             }
         })        
 
+
         let slideIndex = 1;
         showSlides(1)
 
@@ -134,12 +147,12 @@
         }
 
         next.onclick = function(){
-            if(slideIndex<4){
+            if(slideIndex<5){
                 plusSlides(1)
             }
             else{
-                socket.emit('tutorial',5)
-                location.href='test.html'
+                socket.emit('tutorial',3)
+                location.href='tutorial4.html'
                 console.log('test')
             }
         }

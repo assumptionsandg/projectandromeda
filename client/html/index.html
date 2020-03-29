@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <html>
 <meta charset="UTF-8">
-<link rel='stylesheet' type='text/css' href='indexstyle.css'>
+<link rel='stylesheet' type='text/css' href='../css/indexstyle.css.css'>
 
 <title>Project Andromeda</title>
 
 <body style='margin: 0px; background-color: #000000; overflow: hidden;'>    
     <h1>Welcome to Project Andromeda</h1>
-    
+    <div id='tutorials'>
+        <p id='divt'>Tutorials</p>
+        <a id='divbuttont'></a>
+    </div>
     <div id='freesim'>
-        <p id='divp'>Test:</p>
- 
+        <p id='divp'>The Free Simulator</p>
+        <a id='divbuttonp'></a>
+    </div>
+    <div id='database'>
+        <p id='divd'>Database</p>
+        <a id='divbuttond'></a>
     </div>
 
-    <script src='/three.min.js'></script>
-    <script src='/threex.planets.js'></script>
-    <script src='/threex.atmospherematerial.js'></script>
-    <script src='/socket.io.js'></script>
-    <script src='/simulator.js'></script>
+    <script src='../../libraries/three.min.js'></script>
+    <script src='../../libraries/threex.planets.js'></script>
+    <script src='../../libraries/threex.atmospherematerial.js'></script>
+    <script src='../../libraries/socket.io.js'></script>
+    <script src='../../simulator.js'></script>
     <script>
         let indexlogin=1
+        let admin=0
+        let freesim=0
 
         let simStart = new Andromeda()
         simStart.addtoPage()
         simStart.add(new starField())
         simStart.add(new Star(10,0,0,0,0,0,0,0))
         simStart.add(new Atmosphere('Atmosphere',0,1/2,0,1,'orange',0,2.01,0,0,0,0,0,0))
-        simStart.camera.position.x=25
+        simStart.camera.position.x=1
+        allupdate.push(function(){
+            if(simStart.camera.position.x<25){
+                simStart.camera.position.x+=0.1
+                
+            }
+            simStart.camera.lookAt(0,0,0)
 
+        })
+        
         simStart.add(new Earth('Earth',1,1/4,1,10,1,-5,1,1,0.001,0.001,0.03))
         simStart.add(new EarthCloud('Earth',2,1/4,1,1,1,-5,1,1,0.001,0.001,0.03))
         simStart.add(new Atmosphere('Earth',3,1/4,0,1,'blue',1,1.05,-5,1,1,0.001,0.001,0.03))
@@ -36,9 +53,13 @@
 
         simStart.add(new Mars(10,5,-1,-1,-0.001,-0.001,-0.03))
         simStart.add(new Jupiter(10,0,5,-1,0.001,0.001,0.03))
-        simStart.camera.lookAt(0,0,0)
 
         let signedToken = sessionStorage.getItem('JWT')
+        let username = sessionStorage.getItem('user')
+
+        let loggedin = document.createElement('h2')
+        loggedin.innerText = 'Currently logged in as: '+username
+        document.body.appendChild(loggedin)
 
         if(signedToken==null){
             location.href='./'
@@ -56,16 +77,41 @@
                 console.log('logged into index')
                 socket.emit('checkfreesim')
                 socket.emit('checkadmin')
-                socket.emit('receivequestions')
             } else{
                 location.href='./'
             }
                 // alert("Authentication unsuccessful.");
         });
 
-        socket.on('getquestions',function(data){
-
+        socket.on('isfreesim',function(data){
+            if(data.isfreesim){
+                freesim=1
+            }
         })
+
+        socket.on('isadmin',function(data){
+            if(data.isadmin){
+                admin=1
+            }
+        })
+
+        divbuttonp.onclick = function(){
+            if(freesim==1){
+                location.href='freesim.html'
+            }
+            else{
+                alert('Complete the tutorials first')
+            }
+        }
+
+        divbuttond.onclick = function(){
+            if(admin==1){
+                location.href='adminpanel.html'
+            }
+            else{
+                alert('Not an admin')
+            }
+        }
 
 
     </script>
