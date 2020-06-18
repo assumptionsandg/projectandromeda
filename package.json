@@ -4,7 +4,7 @@
   "description": "Current repo of Project Andromeda Development Stages | Version 0.03 aka The Spaghettiest of All Code",
   "main": "server.js",
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "cookie-parser": "^1.4.5",
     "crypto-js": "^4.0.0",
     "express": "^4.17.1",
